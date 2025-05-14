@@ -1,5 +1,5 @@
 import "@/styles/global.css";
-import ClientLayout from "@/components/client/clientLayout";
+import "@ant-design/v5-patch-for-react-19";
 
 export const metadata = {
   title: "Apotek Warehouse & POS",
@@ -9,9 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <ClientLayout>{children}</ClientLayout>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

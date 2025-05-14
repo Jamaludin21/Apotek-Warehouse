@@ -1,17 +1,30 @@
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import React from "react";
-
-export const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  UserOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+export const dataMain = [
+  {
+    key: "1",
+    medicine: "Paracetamol",
+    quantity: 100,
+    price: 5000,
+    date: "2024-05-10",
+  },
+  {
+    key: "2",
+    medicine: "Ibuprofen",
+    quantity: 50,
+    price: 7500,
+    date: "2024-05-11",
+  },
+  {
+    key: "3",
+    medicine: "Amoxicillin",
+    quantity: 30,
+    price: 12000,
+    date: "2024-05-12",
+  },
+  {
+    key: "4",
+    medicine: "Cetirizine",
+    quantity: 75,
+    price: 6500,
+    date: "2024-05-13",
+  },
+];

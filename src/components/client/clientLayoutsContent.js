@@ -7,12 +7,12 @@ import { FooterLayout } from "@/app/layouts/footers";
 
 const { Content } = Layout;
 
-export default function ClientLayoutContent({ children, colorBgContainer }) {
+export default function ClientLayoutContent({ children }) {
   return (
     <Layout className="min-h-[100dvh]">
       <SideLayout />
       <Layout>
-        <HeaderLayout colorBgContainer={colorBgContainer} />
+        <HeaderLayout />
         <Content className="m-4 p-6 bg-white rounded-xl shadow">
           {children}
         </Content>

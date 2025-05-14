@@ -1,5 +1,4 @@
 "use client";
-
 import { Spin, theme } from "antd";
 import { AppProvider } from "@/utils/context/appContext";
 import dynamic from "next/dynamic";
@@ -21,9 +20,7 @@ export default function ClientLayout({ children }) {
 
   return (
     <AppProvider value={propsValue}>
-      <LazyClientLayoutContent colorBgContainer={colorBgContainer}>
-        {children}
-      </LazyClientLayoutContent>
+      <LazyClientLayoutContent>{children}</LazyClientLayoutContent>
     </AppProvider>
   );
 }
