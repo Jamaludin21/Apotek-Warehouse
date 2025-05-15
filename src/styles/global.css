@@ -4,6 +4,10 @@
 @import "./spacing.css";
 @import "./flex.css";
 
-.header-background {
-  color: white !important;
+.bgHeader {
+  background: white !important;
+}
+
+.border-radius-2 {
+  border-radius: 8px;
 }

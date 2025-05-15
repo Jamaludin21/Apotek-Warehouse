@@ -56,7 +56,6 @@ const SidebarItems = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <Menu
-        theme="dark"
         mode="inline"
         selectedKeys={[selectedKey]}
         items={items}
@@ -64,11 +63,11 @@ const SidebarItems = () => {
       />
       <Menu
         mode="inline"
-        theme="dark"
         items={[
           {
             key: "logout",
             label: "Keluar",
+            danger: true,
             icon: <LogoutOutlined />,
           },
         ]}

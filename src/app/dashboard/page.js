@@ -2,7 +2,9 @@
 
 import { SummaryCard } from "@/components/card/dashboard/mainComponents";
 import ClientLayout from "@/components/client/clientLayout";
-import { MainTable } from "@/components/tables/mainTables";
+import { GenericTable } from "@/components/tables/genericTable";
+import { columnMainConfig } from "@/utils/columnHelper";
+import { dataMain } from "@/utils/dataHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Flex, Row } from "antd";
 
@@ -14,7 +16,11 @@ export default function DashboardPage() {
         <Row gutter={[16, 16]}>
           <SummaryCard />
         </Row>
-        <MainTable />
+        <GenericTable
+          title="Latest Transaction"
+          data={dataMain}
+          config={columnMainConfig}
+        />
       </Flex>
     </ClientLayout>
   );

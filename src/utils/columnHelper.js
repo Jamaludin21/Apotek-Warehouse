@@ -1,44 +1,45 @@
-// Sample column definitions and example usage of generic filtering/sorting
-const generateFilters = (dataIndex, data) => {
-  const uniqueValues = Array.from(new Set(data.map((item) => item[dataIndex])));
-  return uniqueValues.map((val) => ({
-    text: val,
-    value: val,
-  }));
-};
+import { generateFilters, getSorter } from "./functionHelper";
 
-export const columnsMain = (data) => [
-  {
-    title: "Medicine",
-    dataIndex: "medicine",
+// Column Setup
+export const columnsSetup = ({ data, columnsConfig }) =>
+  columnsConfig.map(({ title, dataIndex, type }) => ({
+    title,
+    dataIndex,
     showSorterTooltip: { target: "full-header" },
-    filters: generateFilters("medicine", data),
-    onFilter: (value, record) => record.medicine.startsWith(value),
-    sorter: (a, b) => a.medicine.localeCompare(b.medicine),
+    filters: generateFilters(dataIndex, data),
+    onFilter: (value, record) => record[dataIndex] === value,
+    sorter: getSorter(type, dataIndex),
     sortDirections: ["ascend", "descend"],
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-    filters: generateFilters("quantity", data),
-    onFilter: (value, record) => record.quantity === value,
-    sorter: (a, b) => a.quantity - b.quantity,
-    sortDirections: ["ascend", "descend"],
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-    filters: generateFilters("price", data),
-    onFilter: (value, record) => record.price === value,
-    sorter: (a, b) => a.price - b.price,
-    sortDirections: ["ascend", "descend"],
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-    filters: generateFilters("date", data),
-    onFilter: (value, record) => record.date === value,
-    sorter: (a, b) => a.date.localeCompare(b.date),
-    sortDirections: ["ascend", "descend"],
-  },
+  }));
+
+// Column Config
+export const columnUsersConfig = [
+  { title: "Name", dataIndex: "name", type: "string" },
+  { title: "Email", dataIndex: "email", type: "string" },
+  { title: "Role", dataIndex: "role", type: "string" },
+  { title: "Status", dataIndex: "status", type: "string" },
+  { title: "Registered Date", dataIndex: "registeredDate", type: "date" },
+];
+
+export const columnMainConfig = [
+  { title: "Medicine", dataIndex: "medicine", type: "string" },
+  { title: "Quantity", dataIndex: "quantity", type: "number" },
+  { title: "Price", dataIndex: "price", type: "number" },
+  { title: "Date", dataIndex: "date", type: "date" },
+];
+
+export const columnProductConfig = [
+  { title: "Name", dataIndex: "name", type: "string" },
+  { title: "Category", dataIndex: "category", type: "string" },
+  { title: "Stock", dataIndex: "stock", type: "number" },
+  { title: "Price", dataIndex: "price", type: "number" },
+  { title: "Status", dataIndex: "status", type: "string" },
+  { title: "Created Date", dataIndex: "createdDate", type: "date" },
+];
+
+export const columnCategoryConfig = [
+  { title: "Category Name", dataIndex: "categoryName", type: "string" },
+  { title: "Description", dataIndex: "description", type: "string" },
+  { title: "Status", dataIndex: "status", type: "string" },
+  { title: "Created Date", dataIndex: "createdDate", type: "date" },
 ];

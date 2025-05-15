@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/nextjs-registry": "^1.0.2",
+    "@ant-design/pro-layout": "^7.22.4",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@prisma/client": "^6.7.0",
     "antd": "^5.25.1",
