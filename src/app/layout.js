@@ -1,6 +1,5 @@
 import "@/styles/global.css";
 import "@ant-design/v5-patch-for-react-19";
-import { ConfigProvider } from "antd";
 
 export const metadata = {
   title: "Apotek Warehouse & POS",
@@ -10,19 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <ConfigProvider
-          theme={{
-            components: {
-              Layout: {
-                siderBg: "#ffffff",
-              },
-            },
-          }}
-        >
-          {children}
-        </ConfigProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

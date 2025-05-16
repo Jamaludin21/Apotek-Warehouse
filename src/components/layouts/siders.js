@@ -78,7 +78,7 @@ const SidebarItems = () => {
 
 export function SideLayout() {
   return (
-    <Sider breakpoint="md" collapsedWidth="0">
+    <Sider breakpoint="md" collapsedWidth="0" className="bgSider">
       <SidebarItems />
     </Sider>
   );

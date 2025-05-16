@@ -1,20 +1,6 @@
-"use client";
-
-import ClientLayout from "@/components/client/clientLayout";
-import { GenericTable } from "@/components/tables/genericTable";
-import { columnUsersConfig } from "@/utils/columnHelper";
-import { dataUsers } from "@/utils/dataHelper";
-import { useDocumentTitle } from "@/utils/useDocumentTitle";
+import { withAuth } from "@/lib/withAuth";
+import UsersContent from "./usersContent";
 
 export default function UsersPage() {
-  useDocumentTitle();
-  return (
-    <ClientLayout>
-      <GenericTable
-        title="Available Users List"
-        data={dataUsers}
-        config={columnUsersConfig}
-      />
-    </ClientLayout>
-  );
+  return withAuth((session) => <UsersContent user={session} />);
 }
