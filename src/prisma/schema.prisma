@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Core app model
 model Product {
   id        Int      @id @default(autoincrement())
   name      String
@@ -16,49 +15,18 @@ model Product {
   createdAt DateTime @default(now())
 }
 
-// NextAuth-compatible User model
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  username       String    @unique
-  email          String?   @unique
-  password       String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  // Relations
-  accounts       Account[]
-  sessions       Session[]
+  id        String   @id @default(cuid())
+  name      String?
+  username  String   @unique
+  email     String?  @unique
+  password  String
+  role      Role     @default(KEEPER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// NextAuth internal models
-model Account {
-  id                 String   @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  access_token       String?
-  token_type         String?
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-
-  user User @relation(fields: [userId], references: [id])
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+enum Role {
+  MANAGER
+  KEEPER
 }

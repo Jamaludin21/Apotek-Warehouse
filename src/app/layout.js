@@ -1,5 +1,5 @@
 import "@/styles/global.css";
-import "@ant-design/v5-patch-for-react-19";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 export const metadata = {
   title: "Apotek Warehouse & POS",
@@ -9,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AntdRegistry>{children}</AntdRegistry>
+      </body>
     </html>
   );
 }

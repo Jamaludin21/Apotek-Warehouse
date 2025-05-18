@@ -19,5 +19,5 @@ export async function loginAction(formData) {
 
   await setSession(user);
 
-  redirect("/dashboard");
+  redirect("/panel/dashboard");
 }

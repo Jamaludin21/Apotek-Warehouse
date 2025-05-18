@@ -10,6 +10,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "antd";
+import { logout } from "@/utils/functionHelper";
 
 const { Sider } = Layout;
 
@@ -27,27 +28,39 @@ const LabelSidebar = ({ path, label, pathname }) => {
 
 const SidebarItems = () => {
   const pathname = usePathname();
-  const selectedKey = pathname.split("/")[1];
+  const selectedKey = pathname.split("/panel/")[1];
 
   const items = [
     {
       key: "dashboard",
       label: (
-        <LabelSidebar path="/dashboard" label="Dashboard" pathname={pathname} />
+        <LabelSidebar
+          path="/panel/dashboard"
+          label="Dashboard"
+          pathname={pathname}
+        />
       ),
       icon: <AppstoreOutlined />,
     },
     {
       key: "users",
       label: (
-        <LabelSidebar path="/users" label="Manage User" pathname={pathname} />
+        <LabelSidebar
+          path="/panel/users"
+          label="Manage User"
+          pathname={pathname}
+        />
       ),
       icon: <ControlOutlined />,
     },
     {
       key: "products",
       label: (
-        <LabelSidebar path="/products" label="Product" pathname={pathname} />
+        <LabelSidebar
+          path="/panel/products"
+          label="Product"
+          pathname={pathname}
+        />
       ),
       icon: <ProductOutlined />,
     },
@@ -66,7 +79,7 @@ const SidebarItems = () => {
         items={[
           {
             key: "logout",
-            label: "Keluar",
+            label: <span onClick={() => logout()}>Keluar</span>,
             danger: true,
             icon: <LogoutOutlined />,
           },

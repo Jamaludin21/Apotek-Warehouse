@@ -8,7 +8,7 @@ const { Content } = Layout;
 
 export default function ClientLayoutContent({ children }) {
   return (
-    <Layout className="min-h-[100dvh]">
+    <Layout className="h-screen">
       <SideLayout />
       <Layout>
         <HeaderLayout />

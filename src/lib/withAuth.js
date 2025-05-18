@@ -1,8 +1,14 @@
-import { getSession } from "./auth";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { verifySession } from "@/lib/session";
 
 export async function withAuth(renderPage) {
-  const session = await getSession();
-  if (!session) redirect("/login");
+  const sessionToken = cookies().get("session")?.value;
+  const session = sessionToken ? verifySession(sessionToken) : null;
+
+  if (!session) {
+    return redirect("/auth/login");
+  }
+
   return renderPage(session);
 }

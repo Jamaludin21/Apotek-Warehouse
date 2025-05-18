@@ -11,12 +11,16 @@ const LazyClientLayoutContent = dynamic(
   }
 );
 
-export default function ClientLayout({ children }) {
+export default function ClientLayout({ children, session }) {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const propsValue = { colorBgContainer, borderRadiusLG };
+  const propsValue = { colorBgContainer, borderRadiusLG, session };
+
+  if (!session) {
+    window.location.href = "/auth/login";
+  }
 
   return (
     <AppProvider value={propsValue}>
