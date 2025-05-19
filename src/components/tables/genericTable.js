@@ -1,10 +1,10 @@
 import { columnsSetup } from "@/utils/columnHelper";
 import { Table } from "antd";
-import Title from "antd/es/typography/Title";
+import { TableTitle } from "./tableTitle";
 
 export const GenericTable = ({ title, data, config }) => (
   <Table
-    title={() => <Title level={3}>{title}</Title>}
+    title={() => <TableTitle title={title} />}
     columns={columnsSetup({ data, columnsConfig: config })}
     dataSource={data}
     showSorterTooltip={{ target: "sorter-icon" }}

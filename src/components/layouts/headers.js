@@ -2,23 +2,33 @@
 
 import React from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { Dropdown, Typography, Space, Button } from "antd";
+import { Dropdown, Typography, Space, Button, Tag } from "antd";
 import { LogoutOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { useHeadTitle } from "@/utils/useDocumentTitle";
 import { logout } from "@/utils/functionHelper";
 import { useAppContext } from "@/utils/context/appContext";
+import { roleColors } from "@/utils/dataHelper";
 
 const { Text } = Typography;
 
 export const HeaderLayout = () => {
   const pageTitle = useHeadTitle(null);
   const { session } = useAppContext();
-  const { full_name, email } = session;
+  const { full_name, email, role } = session;
 
   const menuItems = [
     {
       key: "email",
-      label: <Text type="secondary">{email}</Text>,
+      label: <Text>{email}</Text>,
+      disabled: true,
+    },
+    {
+      key: "role",
+      label: (
+        <Tag color={roleColors[role] || "default"}>
+          {role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}
+        </Tag>
+      ),
       disabled: true,
     },
     {
@@ -36,7 +46,7 @@ export const HeaderLayout = () => {
   return (
     <PageHeader
       title={pageTitle}
-      className="mx-5 mt-3 bgHeader border-radius-2"
+      className="mx-8 mt-3 bgHeader border-radius-2"
       extra={[
         <Dropdown key="user" menu={{ items: menuItems }}>
           <Button type="text" className="px-0">

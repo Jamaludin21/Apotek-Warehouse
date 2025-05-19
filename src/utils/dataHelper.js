@@ -126,3 +126,8 @@ export const dataCategories = [
     createdDate: "2024-05-11",
   },
 ];
+
+export const roleColors = {
+  MANAGER: "red",
+  KEEPER: "blue",
+};

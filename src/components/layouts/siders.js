@@ -72,7 +72,7 @@ const SidebarItems = () => {
         mode="inline"
         selectedKeys={[selectedKey]}
         items={items}
-        className="mt-16"
+        className="mt-4"
       />
       <Menu
         mode="inline"
