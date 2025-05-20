@@ -1,19 +1,29 @@
-import { Tag } from "antd";
+import { Flex, Tag } from "antd";
 import { generateFilters, getSorter } from "./functionHelper";
 import { roleColors } from "./dataHelper";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { ButtonGeneric } from "@/components/button/buttonGeneric";
 
 // Column Setup
-export const columnsSetup = ({ data, columnsConfig }) => {
-  return columnsConfig.map(({ title, dataIndex, type, render }) => ({
-    title,
-    dataIndex,
-    render,
-    showSorterTooltip: { target: "full-header" },
-    filters: generateFilters(dataIndex, data),
-    onFilter: (value, record) => record[dataIndex] === value,
-    sorter: getSorter(type, dataIndex),
-    sortDirections: ["ascend", "descend"],
-  }));
+export const columnsSetup = ({ data, columnsConfig, propsHandle = {} }) => {
+  return columnsConfig.map((col) => {
+    // Handle action column render with propsHandle
+    if (col.key === "action" && typeof col.render === "function") {
+      return {
+        ...col,
+        render: (_, record) => col.render(record, propsHandle),
+      };
+    }
+
+    return {
+      ...col,
+      filters: generateFilters(col.dataIndex, data),
+      onFilter: (value, record) => record[col.dataIndex] === value,
+      sorter: getSorter(col.type, col.dataIndex),
+      sortDirections: ["ascend", "descend"],
+      showSorterTooltip: { target: "full-header" },
+    };
+  });
 };
 
 // Column Config
@@ -36,6 +46,35 @@ export const columnUsersConfig = [
     title: "Created at",
     dataIndex: "createdAt",
     type: "date",
+  },
+  {
+    key: "action",
+    title: <Flex justify="center">Action</Flex>,
+    render: (record, { showModal, setEditState, setEditData }) => (
+      <Flex justify="center" gap={8}>
+        <ButtonGeneric
+          variant="solid"
+          color="green"
+          icon={<EditOutlined />}
+          text=" Edit"
+          onclick={() => {
+            setEditState(true);
+            setEditData(record);
+            showModal(record);
+          }}
+        />
+        <ButtonGeneric
+          variant="solid"
+          color="red"
+          icon={<DeleteOutlined />}
+          text="Delete"
+          onclick={() => {
+            // You can add confirmation logic here
+            console.log("Deleting", record);
+          }}
+        />
+      </Flex>
+    ),
   },
 ];
 

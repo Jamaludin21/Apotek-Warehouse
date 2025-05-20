@@ -1,3 +1,5 @@
+import { Input, InputNumber, Select } from "antd";
+
 export const dataMain = [
   {
     key: "1",
@@ -26,41 +28,6 @@ export const dataMain = [
     quantity: 75,
     price: 6500,
     date: "2024-05-13",
-  },
-];
-
-export const dataUsers = [
-  {
-    key: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Admin",
-    status: "Active",
-    registeredDate: "2024-05-10",
-  },
-  {
-    key: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "User",
-    status: "Active",
-    registeredDate: "2024-05-11",
-  },
-  {
-    key: "3",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    role: "Manager",
-    status: "Inactive",
-    registeredDate: "2024-05-12",
-  },
-  {
-    key: "4",
-    name: "Bob Brown",
-    email: "bob.brown@example.com",
-    role: "User",
-    status: "Active",
-    registeredDate: "2024-05-13",
   },
 ];
 
@@ -130,4 +97,11 @@ export const dataCategories = [
 export const roleColors = {
   MANAGER: "red",
   KEEPER: "blue",
+};
+
+export const componentMap = {
+  input: Input,
+  number: InputNumber,
+  select: Select,
+  password: Input.Password,
 };
