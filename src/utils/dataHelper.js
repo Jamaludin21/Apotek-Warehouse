@@ -99,6 +99,11 @@ export const roleColors = {
   KEEPER: "blue",
 };
 
+export const roleOptions = [
+  { label: "Manager", value: "MANAGER" },
+  { label: "Keeper", value: "KEEPER" },
+];
+
 export const componentMap = {
   input: Input,
   number: InputNumber,

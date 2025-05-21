@@ -21,10 +21,16 @@ export const GenericTable = ({
             propsHandle={propsHandle}
           />
         )}
-        columns={columnsSetup({ data, columnsConfig: config, propsHandle })}
+        columns={columnsSetup({
+          data,
+          columnsConfig: config,
+          propsHandle,
+          propsValue,
+        })}
         dataSource={data}
         showSorterTooltip={{ target: "sorter-icon" }}
         pagination={data.length <= 10 && false}
+        scroll={{ x: 991 }}
       />
       <GenericModalForm propsHandle={propsHandle} propsValue={propsValue} />
     </React.Fragment>

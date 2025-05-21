@@ -7,6 +7,7 @@ export const ButtonGeneric = ({
   onclick,
   text = "",
   type = "",
+  disable = false,
 }) => {
   return (
     <Button
@@ -15,6 +16,7 @@ export const ButtonGeneric = ({
       color={color}
       icon={icon}
       onClick={onclick}
+      disabled={disable}
     >
       {text}
     </Button>

@@ -32,3 +32,8 @@
   width: 100%;
   max-width: 600px;
 }
+
+.ant-modal.centered-modal {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}

@@ -1,17 +1,25 @@
-import { Flex, Tag } from "antd";
+import { Flex, message, Tag } from "antd";
 import { generateFilters, getSorter } from "./functionHelper";
 import { roleColors } from "./dataHelper";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
+import { ModalConfirm } from "@/components/modal/genericModal";
+import axios from "axios";
 
 // Column Setup
-export const columnsSetup = ({ data, columnsConfig, propsHandle = {} }) => {
+export const columnsSetup = ({
+  data,
+  columnsConfig,
+  propsHandle = {},
+  propsValue = {},
+}) => {
   return columnsConfig.map((col) => {
     // Handle action column render with propsHandle
     if (col.key === "action" && typeof col.render === "function") {
       return {
         ...col,
-        render: (_, record) => col.render(record, propsHandle),
+        fixed: "right",
+        render: (_, record) => col.render(record, propsHandle, propsValue),
       };
     }
 
@@ -29,6 +37,7 @@ export const columnsSetup = ({ data, columnsConfig, propsHandle = {} }) => {
 // Column Config
 export const columnUsersConfig = [
   { key: "name", title: "Name", dataIndex: "name", type: "string" },
+  { key: "username", title: "Username", dataIndex: "username", type: "string" },
   { key: "email", title: "Email", dataIndex: "email", type: "string" },
   {
     key: "role",
@@ -50,17 +59,21 @@ export const columnUsersConfig = [
   {
     key: "action",
     title: <Flex justify="center">Action</Flex>,
-    render: (record, { showModal, setEditState, setEditData }) => (
+    render: (
+      record,
+      { showModal, setEditState, setEditData, router, handleSubmit },
+      { session }
+    ) => (
       <Flex justify="center" gap={8}>
         <ButtonGeneric
           variant="solid"
           color="green"
           icon={<EditOutlined />}
           text=" Edit"
-          onclick={() => {
+          onclick={async () => {
             setEditState(true);
             setEditData(record);
-            showModal(record);
+            showModal();
           }}
         />
         <ButtonGeneric
@@ -68,9 +81,23 @@ export const columnUsersConfig = [
           color="red"
           icon={<DeleteOutlined />}
           text="Delete"
+          disable={session.email === record.email}
           onclick={() => {
-            // You can add confirmation logic here
-            console.log("Deleting", record);
+            ModalConfirm({
+              title: "Are you sure?",
+              content: `Delete user "${record.name}"?`,
+              okText: "Yes",
+              cancelText: "Cancel",
+              onOk: async () => {
+                try {
+                  await axios.delete(`/api/users/${record.id}`);
+                  message.success("User deleted");
+                  router.refresh();
+                } catch (err) {
+                  message.error(err?.response?.data?.error || "Delete failed");
+                }
+              },
+            });
           }}
         />
       </Flex>
