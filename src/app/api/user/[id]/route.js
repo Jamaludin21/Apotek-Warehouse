@@ -16,9 +16,14 @@ export async function PUT(req, { params }) {
   }
 }
 
-export async function DELETE({ params }) {
+export async function DELETE(_, { params }) {
   try {
-    await prisma.user.delete({ where: { id: params.id } });
+    const { id } = await params;
+
+    await prisma.user.delete({
+      where: { id: id },
+    });
+
     return NextResponse.json(
       { message: "Deleted successfully" },
       { status: 200 }

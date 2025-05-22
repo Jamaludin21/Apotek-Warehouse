@@ -17,6 +17,7 @@ export default async function UsersPage() {
     },
   });
   const formattedUsers = mappedDataConstructor(users, columnUsersConfig);
+  if (!users) return;
   return withAuth((session) => (
     <UsersContent session={session} formattedUsers={formattedUsers} />
   ));

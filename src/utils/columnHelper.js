@@ -1,10 +1,14 @@
-import { Flex, message, Tag } from "antd";
-import { generateFilters, getSorter } from "./functionHelper";
+import { Flex, Tag } from "antd";
+import {
+  camelText,
+  generateFilters,
+  getSorter,
+  globalDelete,
+} from "./functionHelper";
 import { roleColors } from "./dataHelper";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
 import { ModalConfirm } from "@/components/modal/genericModal";
-import axios from "axios";
 
 // Column Setup
 export const columnsSetup = ({
@@ -12,6 +16,7 @@ export const columnsSetup = ({
   columnsConfig,
   propsHandle = {},
   propsValue = {},
+  propsState = {},
 }) => {
   return columnsConfig.map((col) => {
     // Handle action column render with propsHandle
@@ -19,7 +24,8 @@ export const columnsSetup = ({
       return {
         ...col,
         fixed: "right",
-        render: (_, record) => col.render(record, propsHandle, propsValue),
+        render: (_, record) =>
+          col.render(record, propsHandle, propsValue, propsState),
       };
     }
 
@@ -45,9 +51,7 @@ export const columnUsersConfig = [
     dataIndex: "role",
     type: "string",
     render: (role) => (
-      <Tag color={roleColors[role] || "default"}>
-        {role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()}
-      </Tag>
+      <Tag color={roleColors[role] || "default"}>{camelText(role)}</Tag>
     ),
   },
   {
@@ -61,8 +65,9 @@ export const columnUsersConfig = [
     title: <Flex justify="center">Action</Flex>,
     render: (
       record,
-      { showModal, setEditState, setEditData, router, handleSubmit },
-      { session }
+      { showModal },
+      { session, apiUri },
+      { setEditState, setEditData, setLoadingTable, router }
     ) => (
       <Flex justify="center" gap={8}>
         <ButtonGeneric
@@ -88,15 +93,8 @@ export const columnUsersConfig = [
               content: `Delete user "${record.name}"?`,
               okText: "Yes",
               cancelText: "Cancel",
-              onOk: async () => {
-                try {
-                  await axios.delete(`/api/users/${record.id}`);
-                  message.success("User deleted");
-                  router.refresh();
-                } catch (err) {
-                  message.error(err?.response?.data?.error || "Delete failed");
-                }
-              },
+              onOk: async () =>
+                await globalDelete({ record, router, apiUri, setLoadingTable }),
             });
           }}
         />

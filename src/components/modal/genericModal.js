@@ -6,11 +6,7 @@ import { useEffect } from "react";
 
 const { confirm } = Modal;
 
-export const GenericModalForm = ({
-  propsHandle = {},
-  propsValue = {},
-  initialValues = {},
-}) => {
+export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
   const { handleSubmit, handleCancel } = propsHandle;
   const {
     form,
@@ -23,20 +19,14 @@ export const GenericModalForm = ({
   } = propsValue;
 
   useEffect(() => {
-    if (openModal) {
-      if (editData && editState) form.setFieldsValue(editData);
-      else form.setFieldsValue(initialValues);
-    }
-  }, [openModal, initialValues, form, editData, editState]);
+    if (editState) form.setFieldsValue(editData);
+  }, [form, editState, editData]);
 
   return (
     <Modal
       title={modalTitle}
       open={openModal}
-      onOk={async () => {
-        const success = await handleSubmit();
-        if (!success) return;
-      }}
+      onOk={async () => await handleSubmit()}
       onCancel={handleCancel}
       confirmLoading={loadingfetch}
       destroyOnHidden
