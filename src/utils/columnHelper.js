@@ -1,4 +1,4 @@
-import { Flex, Tag } from "antd";
+import { Flex, Image, Tag } from "antd";
 import {
   camelText,
   generateFilters,
@@ -61,6 +61,12 @@ export const columnUsersConfig = [
     type: "date",
   },
   {
+    key: "updatedAt",
+    title: "Updated at",
+    dataIndex: "updatedAt",
+    type: "date",
+  },
+  {
     key: "action",
     title: <Flex justify="center">Action</Flex>,
     render: (
@@ -104,19 +110,136 @@ export const columnUsersConfig = [
 ];
 
 export const columnMainConfig = [
-  { title: "Medicine", dataIndex: "medicine", type: "string" },
-  { title: "Quantity", dataIndex: "quantity", type: "number" },
-  { title: "Price", dataIndex: "price", type: "number" },
-  { title: "Date", dataIndex: "date", type: "date" },
+  {
+    key: "custName",
+    title: "Customer Name",
+    dataIndex: "custName",
+    type: "string",
+  },
+  {
+    key: "phone",
+    title: "Phone",
+    dataIndex: "phone",
+    type: "string",
+  },
+  {
+    key: "status",
+    title: "Status",
+    dataIndex: "status",
+    type: "string",
+    render: (status) => (
+      <Tag color={status === "PAID" ? "green" : "orange"}>
+        {camelText(status)}
+      </Tag>
+    ),
+  },
+  {
+    key: "createdByName",
+    title: "Created By",
+    dataIndex: "createdByName",
+    type: "string",
+    customFn: (item) => item.createdBy?.name || item.createdById || "N/A",
+  },
+  {
+    key: "createdAt",
+    title: "Created At",
+    dataIndex: "createdAt",
+    type: "date",
+  },
 ];
 
 export const columnProductConfig = [
-  { title: "Name", dataIndex: "name", type: "string" },
-  { title: "Category", dataIndex: "category", type: "string" },
-  { title: "Stock", dataIndex: "stock", type: "number" },
-  { title: "Price", dataIndex: "price", type: "number" },
-  { title: "Status", dataIndex: "status", type: "string" },
-  { title: "Created Date", dataIndex: "createdDate", type: "date" },
+  {
+    key: "name",
+    title: "Product Name",
+    dataIndex: "name",
+    type: "string",
+  },
+  {
+    key: "category",
+    title: "Category",
+    dataIndex: "category",
+    type: "string",
+    customFn: (item) => item.category?.name || item.categoryId || "N/A",
+  },
+  {
+    key: "description",
+    title: "Description",
+    dataIndex: "description",
+    type: "string",
+  },
+  {
+    key: "price",
+    title: "Price",
+    dataIndex: "price",
+    type: "number",
+  },
+  {
+    key: "stock",
+    title: "Stock",
+    dataIndex: "stock",
+    type: "number",
+  },
+  {
+    key: "image",
+    title: "Image",
+    dataIndex: "image",
+    type: "string",
+    customFn: (record) => <Image src={record.image} alt="Image Product" />,
+  },
+  {
+    key: "createdBy",
+    title: "Created By",
+    dataIndex: "createdBy",
+    type: "string",
+    customFn: (item) => item.createdBy?.name || item.createdById || "N/A",
+  },
+  {
+    key: "createdAt",
+    title: "Created At",
+    dataIndex: "createdAt",
+    type: "date",
+  },
+  {
+    key: "action",
+    title: <Flex justify="center">Action</Flex>,
+    render: (
+      record,
+      { showModal },
+      { apiUri },
+      { setEditState, setEditData, setLoadingTable, router }
+    ) => (
+      <Flex vertical justify="center" gap={8}>
+        <ButtonGeneric
+          variant="solid"
+          color="green"
+          icon={<EditOutlined />}
+          text=" Edit"
+          onclick={async () => {
+            setEditState(true);
+            setEditData(record);
+            showModal();
+          }}
+        />
+        <ButtonGeneric
+          variant="solid"
+          color="red"
+          icon={<DeleteOutlined />}
+          text="Delete"
+          onclick={() => {
+            ModalConfirm({
+              title: "Are you sure?",
+              content: `Delete user "${record.name}"?`,
+              okText: "Yes",
+              cancelText: "Cancel",
+              onOk: async () =>
+                await globalDelete({ record, router, apiUri, setLoadingTable }),
+            });
+          }}
+        />
+      </Flex>
+    ),
+  },
 ];
 
 export const columnCategoryConfig = [

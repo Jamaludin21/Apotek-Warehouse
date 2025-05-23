@@ -1,7 +1,7 @@
 "use client";
 
 import { componentMap } from "@/utils/dataHelper";
-import { Form, Modal, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { useEffect } from "react";
 
 const { confirm } = Modal;
@@ -52,7 +52,11 @@ export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
                     ))}
                   </Component>
                 ) : (
-                  <Component placeholder={field.placeholder} {...field.props} />
+                  <Component
+                    placeholder={field.placeholder}
+                    {...field.props}
+                    style={{ width: "100%" }}
+                  />
                 )}
               </Form.Item>
             );

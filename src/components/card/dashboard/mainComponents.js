@@ -3,14 +3,17 @@ import React from "react";
 
 const { Text } = Typography;
 
-const summaryData = [
-  { label: "Total Users", value: 1 },
-  { label: "Total Product", value: 2 },
-  { label: "Total Category", value: 2 },
-  { label: "Total Order", value: 2 },
-];
+export const SummaryCard = ({ propsCount }) => {
+  const { usersCount, productsCount, categoriesCount, transactionsCount } =
+    propsCount;
 
-export const SummaryCard = () => {
+  const summaryData = [
+    { label: "Total Users", value: usersCount || 0 },
+    { label: "Total Product", value: productsCount || 0 },
+    { label: "Total Category", value: categoriesCount || 0 },
+    { label: "Total Transaction", value: transactionsCount || 0 },
+  ];
+
   return (
     <React.Fragment>
       {summaryData.map((item) => (

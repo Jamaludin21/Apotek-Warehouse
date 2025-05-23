@@ -34,6 +34,6 @@
     "tailwindcss": "^4.1.7"
   },
   "prisma": {
-    "seed": "node src/prisma/seed.js"
+    "seed": "node seed.js"
   }
 }

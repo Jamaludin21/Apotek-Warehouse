@@ -7,14 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id        Int      @id @default(autoincrement())
-  name      String
-  stock     Int
-  price     Float
-  createdAt DateTime @default(now())
+enum Role {
+  MANAGER
+  KEEPER
 }
 
+enum TransactionStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+// =============================
+// USER MODEL
+// =============================
 model User {
   id        String   @id @default(cuid())
   name      String?
@@ -22,11 +29,69 @@ model User {
   email     String?  @unique
   password  String
   role      Role     @default(KEEPER)
+  products  Product[]       @relation("ProductCreator")
+  transactions Transaction[] @relation("TransactionCreator")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum Role {
-  MANAGER
-  KEEPER
+// =============================
+// CATEGORY MODEL
+// =============================
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// =============================
+// PRODUCT MODEL
+// =============================
+model Product {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String?
+  image       String?
+  price       Float
+  stock       Int               @default(0)
+  categoryId  Int
+  category    Category          @relation(fields: [categoryId], references: [id])
+  createdById String
+  createdBy   User              @relation("ProductCreator", fields: [createdById], references: [id])
+  items       TransactionItem[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+// =============================
+// TRANSACTION MODEL
+// =============================
+model Transaction {
+  id           Int               @id @default(autoincrement())
+  custName     String
+  phone        String?
+  status       TransactionStatus @default(PENDING)
+  items        TransactionItem[]
+  createdById  String
+  createdBy    User              @relation("TransactionCreator", fields: [createdById], references: [id])
+  createdAt    DateTime          @default(now())
+}
+
+// =============================
+// TRANSACTION ITEM (Join Table)
+// =============================
+model TransactionItem {
+  id            Int        @id @default(autoincrement())
+  transactionId Int
+  productId     Int
+  quantity      Int
+  unitPrice     Float       // Snapshot of the price at transaction time
+  totalPrice    Float       // unitPrice * quantity
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  product     Product     @relation(fields: [productId], references: [id])
+
+  @@unique([transactionId, productId]) // prevents duplicate products in same transaction
 }

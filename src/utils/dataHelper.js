@@ -106,6 +106,7 @@ export const roleOptions = [
 
 export const componentMap = {
   input: Input,
+  textarea: Input.TextArea,
   number: InputNumber,
   select: Select,
   password: Input.Password,

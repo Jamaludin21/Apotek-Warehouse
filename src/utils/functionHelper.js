@@ -66,6 +66,9 @@ export const globalSubmit = async ({
         ? `${camelText(apiUri)} updated!`
         : `${camelText(apiUri)} created!`
     );
+
+    await router.refresh();
+    setLoadingTable(true);
   } catch (error) {
     message.error(error?.message || "Failed to submit form");
     console.log(error);
@@ -76,9 +79,9 @@ export const globalSubmit = async ({
     setOpenModal(false);
     setLoadingFetch(false);
     if (editState) setEditState(false);
-    setLoadingTable(true);
-    router.refresh(); // reload server-side data
-    setTimeout(() => setLoadingTable(false), 500);
+    setTimeout(() => {
+      setLoadingTable(false);
+    }, 500);
   }
 };
 
@@ -91,12 +94,12 @@ export const globalDelete = async ({
   try {
     await axios.delete(`/api/${apiUri}/${record.key}`);
     message.success(`${camelText(apiUri)} deleted!`);
+    await router.refresh(); // reload server-side data
+    setLoadingTable(true);
   } catch (err) {
     message.error(err?.message || "Delete failed");
     console.log(err);
   } finally {
-    setLoadingTable(true);
-    router.refresh(); // reload server-side data
     setTimeout(() => setLoadingTable(false), 500);
   }
 };

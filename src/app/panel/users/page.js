@@ -16,6 +16,7 @@ export default async function UsersPage() {
       updatedAt: true,
     },
   });
+
   const formattedUsers = mappedDataConstructor(users, columnUsersConfig);
   if (!users) return;
   return withAuth((session) => (

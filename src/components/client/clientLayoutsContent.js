@@ -12,7 +12,7 @@ export default function ClientLayoutContent({ children }) {
       <SideLayout />
       <Layout>
         <HeaderLayout />
-        <Content className="m-4 p-6 bg-white rounded-xl shadow">
+        <Content className="m-4 p-6 bg-white rounded-xl shadow auto-overflow">
           {children}
         </Content>
       </Layout>
