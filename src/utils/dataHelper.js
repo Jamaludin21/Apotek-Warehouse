@@ -1,4 +1,4 @@
-import { Input, InputNumber, Select } from "antd";
+import { Input, InputNumber, Select, Upload } from "antd";
 
 export const dataMain = [
   {
@@ -110,4 +110,5 @@ export const componentMap = {
   number: InputNumber,
   select: Select,
   password: Input.Password,
+  upload: Upload,
 };

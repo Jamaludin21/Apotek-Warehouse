@@ -1,5 +1,5 @@
 import { columnsSetup } from "@/utils/columnHelper";
-import { Card, Table } from "antd";
+import { Table } from "antd";
 import { TableTitle } from "./tableTitle";
 import React from "react";
 import { GenericModalForm } from "../modal/genericModal";
@@ -12,32 +12,28 @@ export const GenericTable = ({
   propsValue = {},
   propsState = {},
 }) => {
-  const { loadingTable } = propsValue;
   return (
     <React.Fragment>
-      <Card>
-        <Table
-          title={() => (
-            <TableTitle
-              title={title}
-              propsHandle={propsHandle}
-              propsState={propsState}
-            />
-          )}
-          columns={columnsSetup({
-            data,
-            columnsConfig: config,
-            propsHandle,
-            propsValue,
-            propsState,
-          })}
-          dataSource={data}
-          showSorterTooltip={{ target: "sorter-icon" }}
-          scroll={{ x: 991 }}
-          pagination={data.length > 10 && { pageSize: 10 }}
-          loading={loadingTable && { tip: "loading..." }}
-        />
-      </Card>
+      <Table
+        title={() => (
+          <TableTitle
+            title={title}
+            propsHandle={propsHandle}
+            propsState={propsState}
+          />
+        )}
+        columns={columnsSetup({
+          data,
+          columnsConfig: config,
+          propsHandle,
+          propsValue,
+          propsState,
+        })}
+        dataSource={data}
+        showSorterTooltip={{ target: "sorter-icon" }}
+        scroll={{ x: 991 }}
+        pagination={data.length > 10 && { pageSize: 10 }}
+      />
       <GenericModalForm
         propsHandle={propsHandle}
         propsValue={propsValue}

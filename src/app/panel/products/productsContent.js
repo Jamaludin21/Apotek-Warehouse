@@ -1,16 +1,16 @@
 "use client";
 
+import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
 import { GenericTable } from "@/components/tables/genericTable";
 import { columnProductConfig } from "@/utils/columnHelper";
 import { productFields } from "@/utils/fieldHelper";
 import { globalSubmit } from "@/utils/functionHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
-import { Form } from "antd";
+import { Card, Form } from "antd";
 import { useRouter } from "next/navigation";
-
 import { useState } from "react";
 
-export default function ProductContent({ formattedProduct }) {
+export default function ProductContent({ formattedProduct, categories }) {
   useDocumentTitle();
   const [form] = Form.useForm();
   const router = useRouter();
@@ -44,6 +44,12 @@ export default function ProductContent({ formattedProduct }) {
     loadingfetch,
     loadingTable,
     apiUri: "product",
+    categoryOptions:
+      categories &&
+      categories.map((value) => ({
+        label: value.name,
+        value: value.id,
+      })),
   };
 
   const propsState = {
@@ -62,13 +68,19 @@ export default function ProductContent({ formattedProduct }) {
   };
 
   return (
-    <GenericTable
-      title="Product Inventory"
-      data={formattedProduct}
-      config={columnProductConfig}
-      propsHandle={propsHandle}
-      propsValue={propsValue}
-      propsState={propsState}
-    />
+    <Card>
+      {loadingTable ? (
+        <DynamicSkeleton />
+      ) : (
+        <GenericTable
+          title="Product Inventory"
+          data={formattedProduct}
+          config={columnProductConfig}
+          propsHandle={propsHandle}
+          propsValue={propsValue}
+          propsState={propsState}
+        />
+      )}
+    </Card>
   );
 }

@@ -9,8 +9,18 @@ export default async function ProductPage() {
     include: { createdBy: true, category: true },
   });
   const formattedProduct = mappedDataConstructor(products, columnProductConfig);
-  if (!products) return;
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+  if (!products || !categories) return;
   return withAuth((session) => (
-    <ProductContent user={session} formattedProduct={formattedProduct} />
+    <ProductContent
+      user={session}
+      formattedProduct={formattedProduct}
+      categories={categories}
+    />
   ));
 }

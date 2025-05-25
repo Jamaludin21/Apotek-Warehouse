@@ -160,7 +160,7 @@ export const columnProductConfig = [
     title: "Category",
     dataIndex: "category",
     type: "string",
-    customFn: (item) => item.category?.name || item.categoryId || "N/A",
+    render: (data) => data.name,
   },
   {
     key: "description",
@@ -206,8 +206,8 @@ export const columnProductConfig = [
     render: (
       record,
       { showModal },
-      { apiUri },
-      { setEditState, setEditData, setLoadingTable, router }
+      { apiUri, initialData },
+      { setEditState, setEditData, setLoadingTable, setInitialData, router }
     ) => (
       <Flex vertical justify="center" gap={8}>
         <ButtonGeneric
@@ -233,7 +233,14 @@ export const columnProductConfig = [
               okText: "Yes",
               cancelText: "Cancel",
               onOk: async () =>
-                await globalDelete({ record, router, apiUri, setLoadingTable }),
+                await globalDelete({
+                  record,
+                  router,
+                  apiUri,
+                  setLoadingTable,
+                  initialData,
+                  setInitialData,
+                }),
             });
           }}
         />

@@ -16,11 +16,19 @@ export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
     editState,
     editData,
     loadingfetch,
+    categoryOptions,
   } = propsValue;
 
+  const transformEditData = (data) => ({
+    ...data,
+    category: data.category?.id ?? data.categoryId ?? null,
+  });
+
   useEffect(() => {
-    if (editState) form.setFieldsValue(editData);
-  }, [form, editState, editData]);
+    if (editState && editData) {
+      form.setFieldsValue(transformEditData(editData));
+    }
+  }, [editState, editData, form]);
 
   return (
     <Modal
@@ -45,7 +53,10 @@ export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
               >
                 {field.type === "select" ? (
                   <Component {...field.props}>
-                    {(field.options || []).map((opt) => (
+                    {(categoryOptions.length > 0
+                      ? categoryOptions
+                      : field.options || []
+                    ).map((opt) => (
                       <Select.Option key={opt.value} value={opt.value}>
                         {opt.label}
                       </Select.Option>

@@ -1,13 +1,26 @@
 import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 import { NextResponse } from "next/server";
 
 export async function PUT(req, { params }) {
   const data = await req.json();
+  const user = getSession();
+  const { id } = params;
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const updated = await prisma.product.update({
-      where: { id: params.id },
-      data,
+      where: { id: parseInt(id) },
+      data: {
+        category: {
+          connect: {
+            id: Number(data.category),
+          },
+        },
+      },
     });
     return NextResponse.json(updated, { status: 200 });
   } catch (error) {
@@ -17,11 +30,15 @@ export async function PUT(req, { params }) {
 }
 
 export async function DELETE(_, { params }) {
-  try {
-    const { id } = await params;
+  const { id } = params;
+  const user = getSession();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
+  try {
     await prisma.product.delete({
-      where: { id: id },
+      where: { id: parseInt(id) },
     });
 
     return NextResponse.json(

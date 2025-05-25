@@ -22,6 +22,7 @@ export const userFields = [
   },
 ];
 
+// utils/productFields.js
 export const productFields = [
   {
     label: "Product Name",
@@ -29,6 +30,15 @@ export const productFields = [
     type: "input",
     placeholder: "Enter product name",
     rules: [{ required: true }],
+  },
+  {
+    label: "Category",
+    name: "category",
+    type: "select",
+    rules: [{ required: true }],
+    props: {
+      allowClear: true,
+    },
   },
   {
     label: "Description",
@@ -51,4 +61,17 @@ export const productFields = [
     placeholder: "Enter stock quantity",
     rules: [{ required: true }],
   },
+  // {
+  //   label: "Product Image",
+  //   name: "image",
+  //   type: "upload",
+  //   rules: [{ required: true }],
+  //   props: {
+  //     listType: "picture-card",
+  //     maxCount: 1,
+  //     accept: "image/*",
+  //   },
+  //   valuePropName: "fileList",
+  //   getValueFromEvent: (e) => (Array.isArray(e) ? e : e?.fileList),
+  // },
 ];
