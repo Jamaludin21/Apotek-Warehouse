@@ -6,7 +6,11 @@ import {
   globalDelete,
 } from "./functionHelper";
 import { roleColors } from "./dataHelper";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  AccountBookOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
 import { ModalConfirm } from "@/components/modal/genericModal";
 
@@ -201,15 +205,27 @@ export const columnProductConfig = [
     type: "date",
   },
   {
+    key: "updatedAt",
+    title: "Updated At",
+    dataIndex: "updatedAt",
+    type: "date",
+  },
+  {
     key: "action",
     title: <Flex justify="center">Action</Flex>,
     render: (
       record,
       { showModal },
-      { apiUri, initialData },
-      { setEditState, setEditData, setLoadingTable, setInitialData, router }
+      { apiUri },
+      { setEditState, setEditData, setLoadingTable, router }
     ) => (
       <Flex vertical justify="center" gap={8}>
+        <ButtonGeneric
+          variant="solid"
+          color="yellow"
+          icon={<AccountBookOutlined />}
+          text="Invoice"
+        />
         <ButtonGeneric
           variant="solid"
           color="green"
@@ -238,8 +254,6 @@ export const columnProductConfig = [
                   router,
                   apiUri,
                   setLoadingTable,
-                  initialData,
-                  setInitialData,
                 }),
             });
           }}

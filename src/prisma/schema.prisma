@@ -61,8 +61,21 @@ model Product {
   createdById String
   createdBy   User              @relation("ProductCreator", fields: [createdById], references: [id])
   items       TransactionItem[]
+  invoices    Invoice[]         
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
+}
+
+// =============================
+// INVOICE MODEL
+// =============================
+model Invoice {
+  id         Int      @id @default(autoincrement())
+  image      String   // URL or path to the invoice image
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 // =============================

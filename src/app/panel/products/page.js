@@ -6,6 +6,7 @@ import { columnProductConfig } from "@/utils/columnHelper";
 
 export default async function ProductPage() {
   const products = await prisma.product.findMany({
+    orderBy: [{ id: "asc" }, { name: "asc" }],
     include: { createdBy: true, category: true },
   });
   const formattedProduct = mappedDataConstructor(products, columnProductConfig);

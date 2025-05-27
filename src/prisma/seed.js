@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.transactionItem.deleteMany();
   await prisma.transaction.deleteMany();
+  await prisma.invoice.deleteMany(); // Clear invoices
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
@@ -34,7 +35,7 @@ async function main() {
 
   // Keeper accounts
   const keeperUsers = [];
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 13; i++) {
     const keeper = await prisma.user.create({
       data: {
         username: `keeper${i}`,
@@ -65,7 +66,7 @@ async function main() {
 
   // Products (12)
   const products = [];
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 15; i++) {
     const randomCategory =
       categories[Math.floor(Math.random() * categories.length)];
     const randomKeeper =
@@ -81,34 +82,58 @@ async function main() {
         createdById: randomKeeper.id,
       },
     });
+
+    // Add 2 dummy invoice images per product
+    await prisma.invoice.createMany({
+      data: [
+        {
+          productId: product.id,
+          image: `https://picsum.photos/seed/invoice${i}a/300/200`,
+        },
+        {
+          productId: product.id,
+          image: `https://picsum.photos/seed/invoice${i}b/300/200`,
+        },
+      ],
+    });
+
     products.push(product);
   }
 
-  // Sample transaction
-  const transaction = await prisma.transaction.create({
-    data: {
-      custName: "John Doe",
-      phone: "081234567890",
-      status: "PAID",
-      createdById: keeperUsers[0].id,
-      items: {
-        create: [
-          {
-            productId: products[0].id,
-            quantity: 2,
-            unitPrice: products[0].price,
-            totalPrice: parseFloat((products[0].price * 2).toFixed(2)),
-          },
-          {
-            productId: products[2].id,
-            quantity: 1,
-            unitPrice: products[2].price,
-            totalPrice: parseFloat((products[2].price * 1).toFixed(2)),
-          },
-        ],
+  // Generate 15 transactions with random products
+  for (let t = 1; t <= 15; t++) {
+    const randomKeeper =
+      keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+
+    // Pick 2–3 random products per transaction
+    const items = [];
+    const numberOfItems = Math.floor(Math.random() * 2) + 2; // 2 or 3 items
+    const selectedProducts = [...products]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, numberOfItems);
+
+    for (const product of selectedProducts) {
+      const quantity = Math.floor(Math.random() * 3) + 1;
+      items.push({
+        productId: product.id,
+        quantity,
+        unitPrice: product.price,
+        totalPrice: parseFloat((product.price * quantity).toFixed(2)),
+      });
+    }
+
+    await prisma.transaction.create({
+      data: {
+        custName: `Customer ${t}`,
+        phone: `08123${Math.floor(1000000 + Math.random() * 8999999)}`,
+        status: "PAID",
+        createdById: randomKeeper.id,
+        items: {
+          create: items,
+        },
       },
-    },
-  });
+    });
+  }
 
   console.log("🌱 Seed data has been created successfully!");
 }

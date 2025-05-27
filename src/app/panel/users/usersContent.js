@@ -4,10 +4,11 @@ import { GenericTable } from "@/components/tables/genericTable";
 import { columnUsersConfig } from "@/utils/columnHelper";
 import { userFields } from "@/utils/fieldHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
-import { Form } from "antd";
+import { Card, Form } from "antd";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { globalSubmit } from "@/utils/functionHelper";
+import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
 
 export default function UsersContent({ session, formattedUsers }) {
   useDocumentTitle();
@@ -62,13 +63,19 @@ export default function UsersContent({ session, formattedUsers }) {
   };
 
   return (
-    <GenericTable
-      title="Available Users List"
-      data={formattedUsers}
-      config={columnUsersConfig}
-      propsHandle={propsHandle}
-      propsValue={propsValue}
-      propsState={propsState}
-    />
+    <Card>
+      {loadingTable ? (
+        <DynamicSkeleton />
+      ) : (
+        <GenericTable
+          title="Available Users List"
+          data={formattedUsers}
+          config={columnUsersConfig}
+          propsHandle={propsHandle}
+          propsValue={propsValue}
+          propsState={propsState}
+        />
+      )}
+    </Card>
   );
 }

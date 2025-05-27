@@ -15,6 +15,7 @@ export async function PUT(req, { params }) {
     const updated = await prisma.product.update({
       where: { id: parseInt(id) },
       data: {
+        ...data,
         category: {
           connect: {
             id: Number(data.category),

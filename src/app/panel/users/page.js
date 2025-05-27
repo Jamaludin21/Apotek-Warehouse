@@ -6,6 +6,7 @@ import { columnUsersConfig } from "@/utils/columnHelper";
 
 export default async function UsersPage() {
   const users = await prisma.user.findMany({
+    orderBy: [{ id: "asc" }, { name: "asc" }],
     select: {
       id: true,
       name: true,
