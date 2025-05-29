@@ -1,4 +1,4 @@
-import { Flex, Image, Tag } from "antd";
+import { Flex, Image, Spin, Tag } from "antd";
 import {
   camelText,
   generateFilters,
@@ -12,7 +12,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
-import { ModalConfirm } from "@/components/modal/genericModal";
+import { ModalConfirm, ModalInfo } from "@/components/modal/genericModal";
 
 // Column Setup
 export const columnsSetup = ({
@@ -189,7 +189,11 @@ export const columnProductConfig = [
     title: "Image",
     dataIndex: "image",
     type: "string",
-    customFn: (record) => <Image src={record.image} alt="Image Product" />,
+    customFn: (record) => (
+      <Flex justify="center">
+        <Image src={record.image} alt="Image Product" placeholder={<Spin />} />
+      </Flex>
+    ),
   },
   {
     key: "createdBy",
@@ -225,6 +229,25 @@ export const columnProductConfig = [
           color="yellow"
           icon={<AccountBookOutlined />}
           text="Invoice"
+          disable={record.productInvoices.length == 0}
+          onclick={() => {
+            ModalInfo({
+              title: `Invoices for "${record.name}"`,
+              content: (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-[400px] overflow-y-auto">
+                  {(record.productInvoices || []).map((inv, idx) => (
+                    <Image
+                      key={idx}
+                      src={inv.invoice?.image}
+                      alt={`Invoice ${idx + 1}`}
+                      style={{ objectFit: "contain" }}
+                    />
+                  ))}
+                </div>
+              ),
+              width: 600,
+            });
+          }}
         />
         <ButtonGeneric
           variant="solid"
@@ -245,7 +268,7 @@ export const columnProductConfig = [
           onclick={() => {
             ModalConfirm({
               title: "Are you sure?",
-              content: `Delete user "${record.name}"?`,
+              content: `Delete product "${record.name}"?`,
               okText: "Yes",
               cancelText: "Cancel",
               onOk: async () =>

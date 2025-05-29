@@ -59,9 +59,9 @@ model Product {
   categoryId  Int
   category    Category          @relation(fields: [categoryId], references: [id])
   createdById String
-  createdBy   User              @relation("ProductCreator", fields: [createdById], references: [id])
+  createdBy   User              @relation("ProductCreator", fields: [createdById], references: [id], onDelete: Cascade)
   items       TransactionItem[]
-  invoices    Invoice[]         
+  productInvoices ProductInvoice[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }
@@ -72,11 +72,31 @@ model Product {
 model Invoice {
   id         Int      @id @default(autoincrement())
   image      String   // URL or path to the invoice image
-  productId  Int
-  product    Product  @relation(fields: [productId], references: [id])
+  productInvoices ProductInvoice[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+// =============================
+// PRODUCT INVOICE MODEL
+// =============================
+
+model ProductInvoice {
+  id         Int      @id @default(autoincrement())
+  productId  Int
+  invoiceId  Int
+  quantity   Int
+  unitPrice  Float
+
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([productId, invoiceId]) // Tidak boleh duplicate product di invoice yang sama
+}
+
 
 // =============================
 // TRANSACTION MODEL
@@ -88,7 +108,7 @@ model Transaction {
   status       TransactionStatus @default(PENDING)
   items        TransactionItem[]
   createdById  String
-  createdBy    User              @relation("TransactionCreator", fields: [createdById], references: [id])
+  createdBy    User              @relation("TransactionCreator", fields: [createdById], references: [id], onDelete: Cascade)
   createdAt    DateTime          @default(now())
 }
 
@@ -103,8 +123,8 @@ model TransactionItem {
   unitPrice     Float       // Snapshot of the price at transaction time
   totalPrice    Float       // unitPrice * quantity
 
-  transaction Transaction @relation(fields: [transactionId], references: [id])
-  product     Product     @relation(fields: [productId], references: [id])
+  transaction   Transaction@relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  product       Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([transactionId, productId]) // prevents duplicate products in same transaction
 }

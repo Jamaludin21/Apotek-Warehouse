@@ -4,16 +4,18 @@ const { hash } = require("bcrypt");
 const prisma = new PrismaClient();
 
 async function main() {
+  // Bersihkan data dalam urutan yang benar
   await prisma.transactionItem.deleteMany();
   await prisma.transaction.deleteMany();
-  await prisma.invoice.deleteMany(); // Clear invoices
+  await prisma.productInvoice.deleteMany(); // Tabel pivot
   await prisma.product.deleteMany();
+  await prisma.invoice.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
 
   const passwordHash = await hash("password123", 10);
 
-  // Manager accounts
+  // Create Manager Users
   await prisma.user.createMany({
     data: [
       {
@@ -33,7 +35,7 @@ async function main() {
     ],
   });
 
-  // Keeper accounts
+  // Create Keeper Users
   const keeperUsers = [];
   for (let i = 1; i <= 13; i++) {
     const keeper = await prisma.user.create({
@@ -48,7 +50,7 @@ async function main() {
     keeperUsers.push(keeper);
   }
 
-  // Categories
+  // Create Categories
   const categoryNames = [
     "Electronics",
     "Groceries",
@@ -58,24 +60,23 @@ async function main() {
   ];
   const categories = [];
   for (let name of categoryNames) {
-    const category = await prisma.category.create({
-      data: { name },
-    });
+    const category = await prisma.category.create({ data: { name } });
     categories.push(category);
   }
 
-  // Products (12)
+  // Create Products
   const products = [];
-  for (let i = 1; i <= 15; i++) {
+  for (let j = 1; j <= 20; j++) {
     const randomCategory =
       categories[Math.floor(Math.random() * categories.length)];
     const randomKeeper =
       keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+
     const product = await prisma.product.create({
       data: {
-        name: `Product ${i}`,
-        description: `Description for Product ${i}`,
-        image: `https://picsum.photos/200?random=${i}`,
+        name: `Product ${j}`,
+        description: `Description for Product ${j}`,
+        image: `https://picsum.photos/200?random=${j}`,
         price: parseFloat((Math.random() * 100 + 10).toFixed(2)),
         stock: Math.floor(Math.random() * 50) + 10,
         categoryId: randomCategory.id,
@@ -83,54 +84,65 @@ async function main() {
       },
     });
 
-    // Add 2 dummy invoice images per product
-    await prisma.invoice.createMany({
-      data: [
-        {
-          productId: product.id,
-          image: `https://picsum.photos/seed/invoice${i}a/300/200`,
-        },
-        {
-          productId: product.id,
-          image: `https://picsum.photos/seed/invoice${i}b/300/200`,
-        },
-      ],
-    });
-
     products.push(product);
   }
 
-  // Generate 15 transactions with random products
-  for (let t = 1; t <= 15; t++) {
-    const randomKeeper =
-      keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+  // Create Invoices + ProductInvoice entries
+  for (let p = 1; p <= 15; p++) {
+    const invoice = await prisma.invoice.create({
+      data: {
+        image: `https://picsum.photos/seed/invoice${p}/300/200`,
+      },
+    });
 
-    // Pick 2–3 random products per transaction
-    const items = [];
-    const numberOfItems = Math.floor(Math.random() * 2) + 2; // 2 or 3 items
+    const numberOfItems = Math.floor(Math.random() * 3) + 1; // 1–3 products
     const selectedProducts = [...products]
       .sort(() => 0.5 - Math.random())
       .slice(0, numberOfItems);
 
-    for (const product of selectedProducts) {
+    for (let product of selectedProducts) {
+      const quantity = Math.floor(Math.random() * 10) + 1;
+      const unitPrice = parseFloat(
+        (product.price * (0.8 + Math.random() * 0.4)).toFixed(2)
+      ); // simulate real cost
+
+      await prisma.productInvoice.create({
+        data: {
+          productId: product.id,
+          invoiceId: invoice.id,
+          quantity,
+          unitPrice,
+        },
+      });
+    }
+  }
+
+  // Create Transactions
+  for (let k = 1; k <= 15; k++) {
+    const randomKeeper =
+      keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+    const numberOfItems = Math.floor(Math.random() * 2) + 2; // 2–3 items
+    const selectedProducts = [...products]
+      .sort(() => 0.5 - Math.random())
+      .slice(0, numberOfItems);
+
+    const items = selectedProducts.map((product) => {
       const quantity = Math.floor(Math.random() * 3) + 1;
-      items.push({
+      return {
         productId: product.id,
         quantity,
         unitPrice: product.price,
         totalPrice: parseFloat((product.price * quantity).toFixed(2)),
-      });
-    }
+      };
+    });
 
     await prisma.transaction.create({
       data: {
-        custName: `Customer ${t}`,
+        custName: `Customer ${k}`,
         phone: `08123${Math.floor(1000000 + Math.random() * 8999999)}`,
         status: "PAID",
         createdById: randomKeeper.id,
-        items: {
-          create: items,
-        },
+        items: { create: items },
       },
     });
   }

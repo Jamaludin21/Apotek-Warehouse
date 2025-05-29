@@ -4,7 +4,7 @@ import { componentMap } from "@/utils/dataHelper";
 import { Form, Input, Modal, Select } from "antd";
 import { useEffect } from "react";
 
-const { confirm } = Modal;
+const { confirm, info } = Modal;
 
 export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
   const { handleSubmit, handleCancel } = propsHandle;
@@ -97,5 +97,30 @@ export const ModalConfirm = (props) => {
     onCancel: onCancel,
     icon: icon,
     className: "centered-modal",
+  });
+};
+
+export const ModalInfo = (props) => {
+  const {
+    title = "",
+    content = "",
+    okText = "",
+    cancelText = "",
+    onCancel,
+    onOk,
+    icon = "",
+    width,
+  } = props;
+  return info({
+    ...props,
+    title: title,
+    content: content,
+    okText: okText,
+    cancelText: cancelText,
+    onOk: onOk,
+    onCancel: onCancel,
+    icon: icon,
+    className: "centered-modal",
+    width: width,
   });
 };

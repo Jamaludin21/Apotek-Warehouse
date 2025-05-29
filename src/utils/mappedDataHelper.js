@@ -8,9 +8,10 @@ import { format } from "date-fns";
  * @returns {Array} - Formatted data ready for table use.
  */
 
-export const mappedDataConstructor = (rawData, formatConfig, context = "") => {
+export const mappedDataConstructor = (rawData, formatConfig) => {
   return rawData.map((item) => {
     const mapped = { key: item.id || item.key };
+    if (item.productInvoices) mapped.productInvoices = item.productInvoices;
     formatConfig.forEach(({ key, dataIndex, type, customFn }) => {
       let value;
 
