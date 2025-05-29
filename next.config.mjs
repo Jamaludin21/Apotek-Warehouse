@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    appDir: true, // already true by default
+  },
+};
 
-export default nextConfig;
+module.exports = nextConfig;
