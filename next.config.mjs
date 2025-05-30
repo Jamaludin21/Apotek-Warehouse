@@ -1,8 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true, // already true by default
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;
