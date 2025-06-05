@@ -1,14 +1,14 @@
 "use client";
 
-import { GenericTable } from "../../../components/tables/genericTable";
-import { columnUsersConfig } from "../../../utils/columnHelper";
-import { userFields } from "../../../utils/fieldHelper";
-import { useDocumentTitle } from "../../../utils/useDocumentTitle";
+import { GenericTable } from "@/components/tables/genericTable";
+import { columnUsersConfig } from "@/utils/columnHelper";
+import { userFields } from "@/utils/fieldHelper";
+import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Card, Form } from "antd";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { globalSubmit } from "../../../utils/functionHelper";
-import { DynamicSkeleton } from "../../../components/skeleton/dynamicSkeleton";
+import { globalSubmit } from "@/utils/functionHelper";
+import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
 
 export default function UsersContent({ session, formattedUsers }) {
   useDocumentTitle();

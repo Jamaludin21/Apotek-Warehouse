@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import prisma from "../../../../lib/prisma";
-import { comparePassword } from "../../../../lib/hash";
-import { createSession } from "../../../../lib/session";
+import prisma from "@/lib/prisma";
+import { comparePassword } from "@/lib/hash";
+import { createSession } from "@/lib/session";
 
 export async function POST(req) {
   const { username, password } = await req.json();

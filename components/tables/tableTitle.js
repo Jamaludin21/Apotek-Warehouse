@@ -1,7 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Flex } from "antd";
 import Title from "antd/es/typography/Title";
-import { ButtonGeneric } from "../button/buttonGeneric";
+import { ButtonGeneric } from "@/components/button/buttonGeneric";
 
 export const TableTitle = ({ title, propsHandle = {}, propsState = {} }) => {
   const { showModal } = propsHandle;

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { verifySession } from "../lib/session";
+import { verifySession } from "@/lib/session";
 
 export default async function Home() {
   const sessionToken = cookies().get("session")?.value;

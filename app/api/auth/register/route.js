@@ -1,5 +1,5 @@
-import { hashPassword } from "../../../../lib/hash";
-import prisma from "../../../../lib/prisma";
+import { hashPassword } from "@/lib/hash";
+import prisma from "@/lib/prisma";
 
 export async function POST(req) {
   const body = await req.json();

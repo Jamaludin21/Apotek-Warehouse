@@ -1,6 +1,6 @@
 "use client";
 import { Spin, theme } from "antd";
-import { AppProvider } from "../../utils/context/appContext";
+import { AppProvider } from "@/utils/context/appContext";
 import dynamic from "next/dynamic";
 
 const LazyClientLayoutContent = dynamic(

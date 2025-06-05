@@ -10,7 +10,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "antd";
-import { logout } from "../../utils/functionHelper";
+import { logout } from "@/utils/functionHelper";
 
 const { Sider } = Layout;
 

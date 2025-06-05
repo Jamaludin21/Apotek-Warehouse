@@ -1,8 +1,8 @@
-import { withAuth } from "../../../lib/withAuth";
+import { withAuth } from "@/lib/withAuth";
 import DashboardContent from "./dashboardContent";
-import prisma from "../../../lib/prisma";
-import { mappedDataConstructor } from "../../../utils/mappedDataHelper";
-import { columnMainConfig } from "../../../utils/columnHelper";
+import prisma from "@/lib/prisma";
+import { mappedDataConstructor } from "@/utils/mappedDataHelper";
+import { columnMainConfig } from "@/utils/columnHelper";
 
 export default async function DashboardPage() {
   const transaction = await prisma.transaction.findMany({

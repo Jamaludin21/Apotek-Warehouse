@@ -1,9 +1,9 @@
 "use client";
 
-import { SummaryCard } from "../../../components/card/dashboard/mainComponents";
-import { GenericTable } from "../../../components/tables/genericTable";
-import { columnMainConfig } from "../../../utils/columnHelper";
-import { useDocumentTitle } from "../../../utils/useDocumentTitle";
+import { SummaryCard } from "@/components/card/dashboard/mainComponents";
+import { GenericTable } from "@/components/tables/genericTable";
+import { columnMainConfig } from "@/utils/columnHelper";
+import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Card, Flex, Row } from "antd";
 
 export default function DashboardContent({ propsCount, formattedTransaction }) {

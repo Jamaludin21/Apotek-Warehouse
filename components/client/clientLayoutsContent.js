@@ -1,8 +1,8 @@
 "use client";
 
 import { Layout } from "antd";
-import { SideLayout } from "../layouts/siders";
-import { HeaderLayout } from "../layouts/headers";
+import { SideLayout } from "@/components/layouts/siders";
+import { HeaderLayout } from "@/components/layouts/headers";
 
 const { Content } = Layout;
 

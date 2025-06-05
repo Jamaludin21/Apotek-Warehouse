@@ -1,8 +1,8 @@
-import { columnsSetup } from "../../utils/columnHelper";
+import { columnsSetup } from "@/utils/columnHelper";
 import { Table } from "antd";
 import { TableTitle } from "./tableTitle";
 import React from "react";
-import { GenericModalForm } from "../modal/genericModal";
+import { GenericModalForm } from "@/components/modal/genericModal";
 
 export const GenericTable = ({
   title,

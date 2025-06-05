@@ -1,5 +1,5 @@
-import prisma from "../../../../lib/prisma";
-import { getSession } from "../../../../lib/session";
+import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 import { NextResponse } from "next/server";
 
 export async function PUT(req, { params }) {

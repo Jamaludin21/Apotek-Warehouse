@@ -1,5 +1,6 @@
 import "@/styles/global.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "Apotek Warehouse & POS",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AntdRegistry>{children}</AntdRegistry>
+        <SpeedInsights />
       </body>
     </html>
   );

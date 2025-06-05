@@ -4,10 +4,10 @@ import React from "react";
 import { PageHeader } from "@ant-design/pro-layout";
 import { Dropdown, Typography, Space, Button, Tag } from "antd";
 import { LogoutOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
-import { useHeadTitle } from "../../utils/useDocumentTitle";
-import { camelText, logout } from "../../utils/functionHelper";
-import { useAppContext } from "../../utils/context/appContext";
-import { roleColors } from "../../utils/dataHelper";
+import { useHeadTitle } from "@/utils/useDocumentTitle";
+import { camelText, logout } from "@/utils/functionHelper";
+import { useAppContext } from "@/utils/context/appContext";
+import { roleColors } from "@/utils/dataHelper";
 
 const { Text } = Typography;
 

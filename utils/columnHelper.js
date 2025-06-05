@@ -11,8 +11,8 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { ButtonGeneric } from "../components/button/buttonGeneric";
-import { ModalConfirm, ModalInfo } from "../components/modal/genericModal";
+import { ButtonGeneric } from "@/components/button/buttonGeneric";
+import { ModalConfirm, ModalInfo } from "@/components/modal/genericModal";
 
 // Column Setup
 export const columnsSetup = ({

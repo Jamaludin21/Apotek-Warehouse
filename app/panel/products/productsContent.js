@@ -1,11 +1,11 @@
 "use client";
 
-import { DynamicSkeleton } from "../../../components/skeleton/dynamicSkeleton";
-import { GenericTable } from "../../../components/tables/genericTable";
-import { columnProductConfig } from "../../../utils/columnHelper";
-import { productFields } from "../../../utils/fieldHelper";
-import { globalSubmit } from "../../../utils/functionHelper";
-import { useDocumentTitle } from "../../../utils/useDocumentTitle";
+import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
+import { GenericTable } from "@/components/tables/genericTable";
+import { columnProductConfig } from "@/utils/columnHelper";
+import { productFields } from "@/utils/fieldHelper";
+import { globalSubmit } from "@/utils/functionHelper";
+import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Card, Form } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

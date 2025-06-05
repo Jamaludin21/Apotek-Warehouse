@@ -1,6 +1,6 @@
 "use client";
 
-import { componentMap } from "../../utils/dataHelper";
+import { componentMap } from "@/utils/dataHelper";
 import { Form, Input, Modal, Select } from "antd";
 import { useEffect } from "react";
 
