@@ -31,7 +31,7 @@ export const GenericTable = ({
         })}
         dataSource={data}
         showSorterTooltip={{ target: "sorter-icon" }}
-        scroll={{ x: 991 }}
+        scroll={{ x: 1600 }}
         pagination={data.length > 10 && { pageSize: 10 }}
       />
       <GenericModalForm

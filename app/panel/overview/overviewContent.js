@@ -1,12 +1,12 @@
 "use client";
 
-import { SummaryCard } from "@/components/card/dashboard/mainComponents";
+import { SummaryCard } from "@/components/card/overview/mainComponents";
 import { GenericTable } from "@/components/tables/genericTable";
 import { columnMainConfig } from "@/utils/columnHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Card, Flex, Row } from "antd";
 
-export default function DashboardContent({ propsCount, formattedTransaction }) {
+export default function OverviewContent({ propsCount, formattedTransaction }) {
   useDocumentTitle();
 
   const propsState = { mainPage: true };

@@ -23,7 +23,7 @@ export default function LoginPage() {
 
       const data = await res.json();
       if (res.ok) {
-        router.push("/panel/dashboard");
+        router.push("/panel/overview");
       } else {
         setError(data.error);
       }

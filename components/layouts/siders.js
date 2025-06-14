@@ -5,6 +5,7 @@ import {
   ControlOutlined,
   LogoutOutlined,
   ProductOutlined,
+  TransactionOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import Link from "next/link";
@@ -32,11 +33,11 @@ const SidebarItems = () => {
 
   const items = [
     {
-      key: "dashboard",
+      key: "overview",
       label: (
         <LabelSidebar
-          path="/panel/dashboard"
-          label="Dashboard"
+          path="/panel/overview"
+          label="Overview"
           pathname={pathname}
         />
       ),
@@ -63,6 +64,17 @@ const SidebarItems = () => {
         />
       ),
       icon: <ProductOutlined />,
+    },
+    {
+      key: "transactions",
+      label: (
+        <LabelSidebar
+          path="/panel/transactions"
+          label="Transaction"
+          pathname={pathname}
+        />
+      ),
+      icon: <TransactionOutlined />,
     },
   ];
 

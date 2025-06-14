@@ -8,5 +8,5 @@ export default async function Home() {
 
   if (!session) {
     redirect("/auth/login");
-  } else redirect("/panel/dashboard");
+  } else redirect("/panel/overview");
 }

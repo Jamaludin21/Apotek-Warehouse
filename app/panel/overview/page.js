@@ -1,10 +1,10 @@
 import { withAuth } from "@/lib/withAuth";
-import DashboardContent from "./dashboardContent";
+import OverviewContent from "./overviewContent";
 import prisma from "@/lib/prisma";
 import { mappedDataConstructor } from "@/utils/mappedDataHelper";
 import { columnMainConfig } from "@/utils/columnHelper";
 
-export default async function DashboardPage() {
+export default async function OverviewPage() {
   const transaction = await prisma.transaction.findMany({
     include: { createdBy: true },
   });
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
   };
 
   return withAuth((session) => (
-    <DashboardContent
+    <OverviewContent
       user={session}
       formattedTransaction={formattedTransaction}
       propsCount={propsCount}

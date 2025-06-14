@@ -1,6 +1,8 @@
 import { Flex, Image, Spin, Tag } from "antd";
 import {
   camelText,
+  formatCurrency,
+  formatDateTime,
   generateFilters,
   getSorter,
   globalDelete,
@@ -46,7 +48,13 @@ export const columnsSetup = ({
 
 // Column Config
 export const columnUsersConfig = [
-  { key: "name", title: "Name", dataIndex: "name", type: "string" },
+  {
+    key: "name",
+    title: "Name",
+    dataIndex: "name",
+    type: "string",
+    fixed: "left",
+  },
   { key: "username", title: "Username", dataIndex: "username", type: "string" },
   { key: "email", title: "Email", dataIndex: "email", type: "string" },
   {
@@ -73,13 +81,14 @@ export const columnUsersConfig = [
   {
     key: "action",
     title: <Flex justify="center">Action</Flex>,
+    fixed: "right",
     render: (
       record,
       { showModal },
       { session, apiUri },
       { setEditState, setEditData, setLoadingTable, router }
     ) => (
-      <Flex justify="center" gap={8}>
+      <Flex vertical justify="center" gap={8}>
         <ButtonGeneric
           variant="solid"
           color="green"
@@ -119,6 +128,7 @@ export const columnMainConfig = [
     title: "Customer Name",
     dataIndex: "custName",
     type: "string",
+    fixed: "left",
   },
   {
     key: "phone",
@@ -158,6 +168,7 @@ export const columnProductConfig = [
     title: "Product Name",
     dataIndex: "name",
     type: "string",
+    fixed: "left",
   },
   {
     key: "category",
@@ -217,6 +228,7 @@ export const columnProductConfig = [
   {
     key: "action",
     title: <Flex justify="center">Action</Flex>,
+    fixed: "right",
     render: (
       record,
       { showModal },
@@ -283,6 +295,90 @@ export const columnProductConfig = [
         />
       </Flex>
     ),
+  },
+];
+
+export const columnTransactionConfig = [
+  {
+    key: "custName",
+    title: "Customer Name",
+    dataIndex: "custName",
+    type: "string",
+    fixed: "left",
+  },
+  {
+    key: "phone",
+    title: "Phone Number",
+    dataIndex: "phone",
+    type: "string",
+  },
+  {
+    key: "status",
+    title: "Status",
+    dataIndex: "status",
+    type: "string",
+    render: (status) => {
+      let color = "orange";
+      if (status === "PAID") color = "green";
+      else if (status === "FAILED") color = "red";
+      else if (status === "CANCELLED") color = "volcano";
+      return <Tag color={color}>{camelText(status)}</Tag>;
+    },
+  },
+  {
+    key: "productNames",
+    title: "Products",
+    dataIndex: "productNames",
+    type: "string",
+  },
+  {
+    key: "productCategories",
+    title: "Categories",
+    dataIndex: "productCategories",
+    type: "string",
+  },
+
+  {
+    key: "productImages",
+    title: "Images",
+    dataIndex: "productImages",
+    type: "imageList",
+    render: (images) => (
+      <Flex gap={8}>
+        {images?.map((img, idx) => (
+          <Image
+            key={idx}
+            src={img}
+            alt="Product"
+            style={{ width: 40, height: 40, objectFit: "cover" }}
+          />
+        ))}
+      </Flex>
+    ),
+  },
+  {
+    key: "total",
+    title: "Total Amount",
+    dataIndex: "total",
+    type: "currency",
+    render: (total) => formatCurrency(total),
+    sorter: (a, b) => a.total - b.total,
+  },
+  {
+    key: "createdBy",
+    title: "Created By",
+    dataIndex: "createdBy",
+    type: "string",
+    render: (createdBy) => createdBy?.name || "N/A",
+  },
+  {
+    key: "createdAt",
+    title: "Created At",
+    dataIndex: "createdAt",
+    type: "date",
+    render: (createdAt) => formatDateTime(createdAt),
+    sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+    fixed: "right",
   },
 ];
 

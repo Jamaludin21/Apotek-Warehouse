@@ -9,7 +9,7 @@ function capitalize(word) {
 }
 
 function formatTitleFromPath(pathname) {
-  if (!pathname || pathname === "/") return "Dashboard";
+  if (!pathname || pathname === "/") return "Overview";
   const segments = pathname.split("/").filter(Boolean);
   const last = segments[segments.length - 1];
   return capitalize(last);

@@ -26,6 +26,18 @@ export const camelText = (text) => {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 };
 
+export const formatCurrency = (value) =>
+  new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(value || 0);
+
+export const formatDateTime = (date) =>
+  new Intl.DateTimeFormat("id-ID", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(date));
+
 // Function Handling API
 export const logout = async () => {
   const res = await fetch("/api/auth/logout", { method: "POST" });
