@@ -12,7 +12,13 @@ export const generateFilters = (dataIndex, data) => {
 export const getSorter = (type, dataIndex) => {
   switch (type) {
     case "string":
-      return (a, b) => a[dataIndex].localeCompare(b[dataIndex]);
+      return (a, b) => {
+        const valA = a[dataIndex];
+        const valB = b[dataIndex];
+        const strA = typeof valA === "string" ? valA : valA?.name || "";
+        const strB = typeof valB === "string" ? valB : valB?.name || "";
+        return strA.localeCompare(strB);
+      };
     case "number":
       return (a, b) => a[dataIndex] - b[dataIndex];
     case "date":

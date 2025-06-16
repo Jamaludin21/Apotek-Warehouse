@@ -1,16 +1,41 @@
-import { Form, Input, Table, Button, List, InputNumber } from "antd";
+import { formatCurrency } from "@/utils/functionHelper";
+import {
+  Form,
+  Input,
+  Table,
+  Button,
+  List,
+  InputNumber,
+  Card,
+  Typography,
+  Flex,
+  Image,
+  Spin,
+} from "antd";
 import React, { useState } from "react";
 
 export const CustomerForm = ({ onChange }) => {
   return (
-    <Form onValuesChange={onChange} layout="vertical">
-      <Form.Item name="name" label="Customer Name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}>
-        <InputNumber style={{ width: "100%" }} />
-      </Form.Item>
-    </Form>
+    <Flex justify="center">
+      <Card title="Data Customer" className="add-transaction my-4">
+        <Form onValuesChange={onChange} layout="vertical">
+          <Form.Item
+            name="name"
+            label="Customer Name"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="Phone Number"
+            rules={[{ required: true }]}
+          >
+            <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
+        </Form>
+      </Card>
+    </Flex>
   );
 };
 
@@ -31,9 +56,15 @@ export const ProductAssignment = ({ data, onChange }) => {
       }}
       rowKey="key"
       dataSource={data}
+      scroll={{ x: 1200, y: 55 * 6 }}
+      pagination={false}
       columns={[
         { title: "Product", dataIndex: "name" },
-        { title: "Price", dataIndex: "price" },
+        {
+          title: "Price",
+          dataIndex: "price",
+          render: (value) => formatCurrency(value),
+        },
         { title: "Stock", dataIndex: "stock" },
       ]}
     />
@@ -41,13 +72,10 @@ export const ProductAssignment = ({ data, onChange }) => {
 };
 
 export const ReviewTransaction = ({ dataCustomer, dataProduct }) => {
-  console.log("Customer:", dataCustomer);
-  console.log("Products:", dataProduct, Array.isArray(dataProduct));
-
-  const customer = dataCustomer.customer || {};
-  const products = Array.isArray(dataProduct.products)
-    ? dataProduct.products
-    : [];
+  const customer = dataCustomer || {};
+  const products = Array.isArray(dataProduct)
+    ? dataProduct
+    : Object.values(dataProduct || {});
 
   const items = products.map((product) => ({
     ...product,
@@ -55,56 +83,63 @@ export const ReviewTransaction = ({ dataCustomer, dataProduct }) => {
     totalPrice: product.price,
   }));
 
-  console.log(items);
+  const total = items.reduce((sum, i) => sum + i.totalPrice, 0);
 
-  //   const total = items.reduce((sum, i) => sum + i.totalPrice, 0);
-
-  //   return (
-  //     <React.Fragment>
-  //       <h3>Customer: {customer.name}</h3>
-  //       <List
-  //         itemLayout="horizontal"
-  //         dataSource={items}
-  //         renderItem={(item) => (
-  //           <List.Item>
-  //             {item.name} - Qty: {item.quantity} - Price: {item.price}
-  //           </List.Item>
-  //         )}
-  //       />
-  //       <p>
-  //         <b>Total:</b> {total}
-  //       </p>
-  //     </React.Fragment>
-  //   );
+  return (
+    <Flex justify="center">
+      <Card
+        title={`Customer: ${customer.name}`}
+        className="add-transaction my-4"
+      >
+        <Flex vertical gap={8}>
+          <List
+            itemLayout="horizontal"
+            dataSource={items}
+            renderItem={(item, index) => (
+              <List.Item>
+                {index + 1}. {item.name} - Qty: {item.quantity} - Price:{" "}
+                {formatCurrency(item.price)}
+              </List.Item>
+            )}
+          />
+          <Typography.Text strong className="flex justify-end mt-4">
+            Total Price: {formatCurrency(total)}
+          </Typography.Text>
+        </Flex>
+      </Card>
+    </Flex>
+  );
 };
 
 export const InvoiceSummary = ({ data, prev }) => {
   const { transaction } = data;
 
-  const totalQty = transaction.items.length;
-  const totalPrice = transaction.total;
-  const ppn = totalPrice * 0.1;
-  const grandTotal = totalPrice + ppn;
+  console.log(data);
 
-  return (
-    <React.Fragment>
-      <h3>Invoice</h3>
-      <p>
-        <b>Customer:</b> {transaction.customer.name}
-      </p>
-      <p>
-        <b>Total Items:</b> {totalQty}
-      </p>
-      <p>
-        <b>Total Price:</b> {totalPrice.toFixed(2)}
-      </p>
-      <p>
-        <b>PPN 10%:</b> {ppn.toFixed(2)}
-      </p>
-      <p>
-        <b>Grand Total:</b> {grandTotal.toFixed(2)}
-      </p>
-      <Button onClick={prev}>Previous</Button>
-    </React.Fragment>
-  );
+  // const totalQty = transaction.items.length;
+  // const totalPrice = transaction.total;
+  // const ppn = totalPrice * 0.1;
+  // const grandTotal = totalPrice + ppn;
+
+  // return (
+  //   <React.Fragment>
+  //     <h3>Invoice</h3>
+  //     <p>
+  //       <b>Customer:</b> {transaction.customer.name}
+  //     </p>
+  //     <p>
+  //       <b>Total Items:</b> {totalQty}
+  //     </p>
+  //     <p>
+  //       <b>Total Price:</b> {totalPrice.toFixed(2)}
+  //     </p>
+  //     <p>
+  //       <b>PPN 10%:</b> {ppn.toFixed(2)}
+  //     </p>
+  //     <p>
+  //       <b>Grand Total:</b> {grandTotal.toFixed(2)}
+  //     </p>
+  //     <Button onClick={prev}>Previous</Button>
+  //   </React.Fragment>
+  // );
 };

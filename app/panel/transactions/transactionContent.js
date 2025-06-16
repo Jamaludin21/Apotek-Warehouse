@@ -18,11 +18,7 @@ export default function TransactionContent({
   const [formData, setFormData] = useState({
     customer: {},
     products: [],
-    transaction: {},
-    invoice: {},
   });
-
-  console.log(formData);
 
   const showModal = () => {
     setOpenModal(true);

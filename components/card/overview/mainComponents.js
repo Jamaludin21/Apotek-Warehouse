@@ -1,17 +1,18 @@
+import { formatCurrency } from "@/utils/functionHelper";
 import { Col, Card, Flex, Typography } from "antd";
 import React from "react";
 
 const { Text } = Typography;
 
 export const SummaryCard = ({ propsCount }) => {
-  const { usersCount, productsCount, categoriesCount, transactionsCount } =
+  const { totalRevenue, productsCount, transactionsCount, totalProductSold } =
     propsCount;
 
   const summaryData = [
-    { label: "Total Users", value: usersCount || 0 },
+    { label: "Total Revenue", value: formatCurrency(totalRevenue) || 0 },
     { label: "Total Product", value: productsCount || 0 },
-    { label: "Total Category", value: categoriesCount || 0 },
     { label: "Total Transaction", value: transactionsCount || 0 },
+    { label: "Product Sold", value: totalProductSold || 0 },
   ];
 
   return (

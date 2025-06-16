@@ -18,6 +18,7 @@ export const GenericTable = ({
         title={() => (
           <TableTitle
             title={title}
+            propsValue={propsValue}
             propsHandle={propsHandle}
             propsState={propsState}
           />
@@ -31,7 +32,7 @@ export const GenericTable = ({
         })}
         dataSource={data}
         showSorterTooltip={{ target: "sorter-icon" }}
-        scroll={{ x: 1600 }}
+        scroll={{ x: 1600, y: 55 * 6 }}
         pagination={data.length > 10 && { pageSize: 10 }}
       />
       <GenericModalForm

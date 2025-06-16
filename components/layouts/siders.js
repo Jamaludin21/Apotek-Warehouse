@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "antd";
 import { logout } from "@/utils/functionHelper";
+import { useAppContext } from "@/utils/context/appContext";
 
 const { Sider } = Layout;
 
@@ -28,8 +29,10 @@ const LabelSidebar = ({ path, label, pathname }) => {
 };
 
 const SidebarItems = () => {
+  const { session } = useAppContext();
   const pathname = usePathname();
   const selectedKey = pathname.split("/panel/")[1];
+  const role = session?.role;
 
   const items = [
     {
@@ -42,6 +45,7 @@ const SidebarItems = () => {
         />
       ),
       icon: <AppstoreOutlined />,
+      roles: ["MANAGER", "KEEPER"],
     },
     {
       key: "users",
@@ -53,17 +57,19 @@ const SidebarItems = () => {
         />
       ),
       icon: <ControlOutlined />,
+      roles: ["MANAGER"],
     },
     {
       key: "products",
       label: (
         <LabelSidebar
           path="/panel/products"
-          label="Product"
+          label={role == "MANAGER" ? "Product" : "Stock Product"}
           pathname={pathname}
         />
       ),
       icon: <ProductOutlined />,
+      roles: ["MANAGER", "KEEPER"],
     },
     {
       key: "transactions",
@@ -75,15 +81,20 @@ const SidebarItems = () => {
         />
       ),
       icon: <TransactionOutlined />,
+      roles: ["KEEPER"],
     },
   ];
+
+  const filteredItems = items.filter(
+    (item) => item.roles && item.roles.includes(role)
+  );
 
   return (
     <div className="h-full flex flex-col justify-between">
       <Menu
         mode="inline"
         selectedKeys={[selectedKey]}
-        items={items}
+        items={filteredItems}
         className="mt-4"
       />
       <Menu

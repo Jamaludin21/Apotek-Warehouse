@@ -12,6 +12,7 @@ import {
   AccountBookOutlined,
   DeleteOutlined,
   EditOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
 import { ModalConfirm, ModalInfo } from "@/components/modal/genericModal";
@@ -24,12 +25,15 @@ export const columnsSetup = ({
   propsValue = {},
   propsState = {},
 }) => {
+  const role = propsValue?.session?.role || "";
   return columnsConfig.map((col) => {
     // Handle action column render with propsHandle
     if (col.key === "action" && typeof col.render === "function") {
       return {
         ...col,
         fixed: "right",
+        ...(Array.isArray(col.roles) &&
+          !col.roles.includes(role) && { hidden: true }),
         render: (_, record) =>
           col.render(record, propsHandle, propsValue, propsState),
       };
@@ -137,17 +141,6 @@ export const columnMainConfig = [
     type: "string",
   },
   {
-    key: "status",
-    title: "Status",
-    dataIndex: "status",
-    type: "string",
-    render: (status) => (
-      <Tag color={status === "PAID" ? "green" : "orange"}>
-        {camelText(status)}
-      </Tag>
-    ),
-  },
-  {
     key: "createdByName",
     title: "Created By",
     dataIndex: "createdByName",
@@ -159,6 +152,15 @@ export const columnMainConfig = [
     title: "Created At",
     dataIndex: "createdAt",
     type: "date",
+  },
+  {
+    title: "Total Price",
+    dataIndex: "items",
+    key: "items",
+    render: (items) => {
+      const total = items?.reduce((sum, i) => sum + i.totalPrice, 0);
+      return formatCurrency(total);
+    },
   },
 ];
 
@@ -188,6 +190,7 @@ export const columnProductConfig = [
     title: "Price",
     dataIndex: "price",
     type: "number",
+    render: (value) => formatCurrency(value),
   },
   {
     key: "stock",
@@ -229,6 +232,8 @@ export const columnProductConfig = [
     key: "action",
     title: <Flex justify="center">Action</Flex>,
     fixed: "right",
+    roles: ["MANAGER"],
+    page: "product",
     render: (
       record,
       { showModal },
@@ -378,7 +383,21 @@ export const columnTransactionConfig = [
     type: "date",
     render: (createdAt) => formatDateTime(createdAt),
     sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+  },
+  {
+    key: "action",
+    title: <Flex justify="center">Action</Flex>,
     fixed: "right",
+    render: (record) => (
+      <Flex vertical justify="center" gap={8}>
+        <ButtonGeneric
+          variant="solid"
+          color="green"
+          icon={<PrinterOutlined />}
+          text="Print Invoice"
+        />
+      </Flex>
+    ),
   },
 ];
 

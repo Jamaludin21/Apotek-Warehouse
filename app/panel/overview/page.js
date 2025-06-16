@@ -6,23 +6,24 @@ import { columnMainConfig } from "@/utils/columnHelper";
 
 export default async function OverviewPage() {
   const transaction = await prisma.transaction.findMany({
-    include: { createdBy: true },
+    include: { createdBy: true, items: true },
   });
   const formattedTransaction = mappedDataConstructor(
     transaction,
     columnMainConfig
   );
 
-  const usersCount = await prisma.user.count();
+  const items = await prisma.transactionItem.findMany();
+  const totalRevenue = items.reduce((sum, item) => sum + item.totalPrice, 0);
+  const totalProductSold = items.reduce((sum, item) => sum + item.quantity, 0);
   const productsCount = await prisma.product.count();
-  const categoriesCount = await prisma.category.count();
   const transactionsCount = await prisma.transaction.count();
 
   const propsCount = {
-    usersCount,
+    totalRevenue,
     productsCount,
-    categoriesCount,
     transactionsCount,
+    totalProductSold,
   };
 
   return withAuth((session) => (

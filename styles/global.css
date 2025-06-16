@@ -37,6 +37,12 @@
   max-width: 600px;
 }
 
+.add-transaction {
+  margin: auto;
+  width: 100%;
+  max-width: 500px;
+}
+
 .ant-modal.centered-modal {
   top: 50% !important;
   transform: translateY(-50%) !important;

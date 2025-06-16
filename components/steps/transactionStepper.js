@@ -17,6 +17,25 @@ export default function TransactionStepper({
   const { formData, formattedProduct } = propsValue;
   const stepKeys = ["customer", "products", "transaction", "invoice"];
 
+  const isStepValid = () => {
+    const currentKey = stepKeys[current];
+    const currentData = formData[currentKey];
+
+    if (!currentData) return false;
+
+    switch (currentKey) {
+      case "customer":
+        return !!(currentData.name && currentData.phone);
+      case "products":
+        const productsArray = Array.isArray(currentData)
+          ? currentData
+          : Object.values(currentData);
+        return productsArray.length > 0;
+      default:
+        return true;
+    }
+  };
+
   const next = () => {
     setCurrent((prev) => prev + 1);
   };
@@ -70,16 +89,16 @@ export default function TransactionStepper({
   const CurrentStep = steps[current]?.content;
 
   return (
-    <Card>
+    <Card title="Add New Transaction">
       <Steps current={current} items={items} />
       <div className="my-6">{CurrentStep}</div>
       <Flex justify="end" className="mt-6" gap={8}>
         <Button danger onClick={onClose}>
           Cancel
         </Button>
-        {current > 0 && <Button onClick={() => prev()}>Previous</Button>}
+        {current > 0 && <Button onClick={prev}>Previous</Button>}
         {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
+          <Button type="primary" onClick={next} disabled={!isStepValid()}>
             Next
           </Button>
         )}

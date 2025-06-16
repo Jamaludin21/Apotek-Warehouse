@@ -10,7 +10,7 @@ import { Card, Form } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function ProductContent({ formattedProduct, categories }) {
+export default function ProductContent({ formattedProduct, categories, user }) {
   useDocumentTitle();
   const [form] = Form.useForm();
   const router = useRouter();
@@ -50,6 +50,7 @@ export default function ProductContent({ formattedProduct, categories }) {
         label: value.name,
         value: value.id,
       })),
+    session: user,
   };
 
   const propsState = {
