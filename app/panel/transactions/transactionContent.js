@@ -10,6 +10,7 @@ import { useState } from "react";
 export default function TransactionContent({
   formattedTransaction,
   formattedProduct,
+  session,
 }) {
   useDocumentTitle();
   const [form] = Form.useForm();
@@ -39,6 +40,7 @@ export default function TransactionContent({
     openModal,
     formData,
     formattedProduct,
+    session,
   };
 
   const propsState = { transactionStep: true, setFormData };

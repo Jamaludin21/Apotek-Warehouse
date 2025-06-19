@@ -10,10 +10,10 @@ function getRandomRupiah(min = 10000, max = 10_000_000) {
 async function main() {
   // Clean up in correct order
   await prisma.transactionItem.deleteMany();
-  await prisma.transaction.deleteMany();
   await prisma.productInvoice.deleteMany();
-  await prisma.product.deleteMany();
   await prisma.invoice.deleteMany();
+  await prisma.transaction.deleteMany();
+  await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
 
@@ -41,7 +41,7 @@ async function main() {
 
   // Create Keeper Users
   const keeperUsers = [];
-  for (let i = 1; i <= 13; i++) {
+  for (let i = 1; i <= 5; i++) {
     const keeper = await prisma.user.create({
       data: {
         username: `keeper${i}`,
@@ -68,7 +68,7 @@ async function main() {
     categories.push(category);
   }
 
-  // Create Products with Rupiah price
+  // Create Products
   const products = [];
   for (let j = 1; j <= 20; j++) {
     const randomCategory =
@@ -93,68 +93,56 @@ async function main() {
     products.push(product);
   }
 
-  // Create Invoices + ProductInvoice entries
-  for (let p = 1; p <= 15; p++) {
-    const invoice = await prisma.invoice.create({
-      data: {
-        image: `https://picsum.photos/seed/invoice${p}/300/200`,
-      },
-    });
+  // // Create Transactions with Invoice
+  // for (let k = 1; k <= 15; k++) {
+  //   const randomKeeper =
+  //     keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+  //   const numberOfItems = Math.floor(Math.random() * 2) + 2;
+  //   const selectedProducts = [...products]
+  //     .sort(() => 0.5 - Math.random())
+  //     .slice(0, numberOfItems);
 
-    const numberOfItems = Math.floor(Math.random() * 3) + 1;
-    const selectedProducts = [...products]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, numberOfItems);
+  //   const items = selectedProducts.map((product) => {
+  //     const quantity = Math.floor(Math.random() * 3) + 1;
+  //     const unitPrice = getRandomRupiah();
+  //     const totalPrice = unitPrice * quantity;
 
-    for (let product of selectedProducts) {
-      const quantity = Math.floor(Math.random() * 10) + 1;
-      const unitPrice = getRandomRupiah(); // Simulate invoice unit price
+  //     return {
+  //       productId: product.id,
+  //       quantity,
+  //       unitPrice,
+  //       totalPrice,
+  //     };
+  //   });
 
-      await prisma.productInvoice.create({
-        data: {
-          productId: product.id,
-          invoiceId: invoice.id,
-          quantity,
-          unitPrice,
-        },
-      });
-    }
-  }
+  //   // Create the transaction first
+  //   const transaction = await prisma.transaction.create({
+  //     data: {
+  //       custName: `Customer ${k}`,
+  //       phone: `08123${Math.floor(1000000 + Math.random() * 8999999)}`,
+  //       status: "PAID",
+  //       createdById: randomKeeper.id,
+  //       items: { create: items },
+  //     },
+  //   });
 
-  // Create Transactions
-  for (let k = 1; k <= 15; k++) {
-    const randomKeeper =
-      keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
-    const numberOfItems = Math.floor(Math.random() * 2) + 2;
-    const selectedProducts = [...products]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, numberOfItems);
+  //   // Create the invoice and relate it to the transaction
+  //   await prisma.invoice.create({
+  //     data: {
+  //       transactionId: transaction.id,
+  //       image: `https://picsum.photos/seed/invoice${k}/300/200`,
+  //       productInvoices: {
+  //         create: items.map((item) => ({
+  //           productId: item.productId,
+  //           quantity: item.quantity,
+  //           unitPrice: item.unitPrice,
+  //         })),
+  //       },
+  //     },
+  //   });
+  // }
 
-    const items = selectedProducts.map((product) => {
-      const quantity = Math.floor(Math.random() * 3) + 1;
-      const unitPrice = getRandomRupiah();
-      const totalPrice = unitPrice * quantity;
-
-      return {
-        productId: product.id,
-        quantity,
-        unitPrice,
-        totalPrice,
-      };
-    });
-
-    await prisma.transaction.create({
-      data: {
-        custName: `Customer ${k}`,
-        phone: `08123${Math.floor(1000000 + Math.random() * 8999999)}`,
-        status: "PAID",
-        createdById: randomKeeper.id,
-        items: { create: items },
-      },
-    });
-  }
-
-  console.log("🌱 Seed data with IDR pricing has been created successfully!");
+  console.log("🌱 Seed data created!");
 }
 
 main()

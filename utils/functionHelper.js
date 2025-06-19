@@ -1,5 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export const generateFilters = (dataIndex, data) => {
   const uniqueValues = Array.from(new Set(data.map((item) => item[dataIndex])));
@@ -43,6 +45,43 @@ export const formatDateTime = (date) =>
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(date));
+
+export const generateInvoiceImage = async () => {
+  const element = document.getElementById("invoice-receipt");
+  const canvas = await html2canvas(element);
+  // const imgData = canvas.toDataURL("image/png");
+  // setImagePreview(imgData); // 👈 show preview
+
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, "image/png")
+  );
+
+  const formData = new FormData();
+  formData.append("file", blob, "invoice.png");
+
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  const result = await res.json();
+  return result.url; // use this to save to invoice.image
+};
+
+export const generatePdf = async () => {
+  const element = document.getElementById("invoice-receipt");
+  const canvas = await html2canvas(element);
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: [canvas.width, canvas.height],
+  });
+
+  pdf.addImage(imgData, "PNG", 0, 0);
+  pdf.save("invoice.pdf");
+};
 
 // Function Handling API
 export const logout = async () => {
