@@ -13,6 +13,7 @@ import {
   TrademarkCircleOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
+import { generateInvoiceImage } from "@/utils/functionHelper";
 
 export default function TransactionStepper({
   propsState,
@@ -89,6 +90,19 @@ export default function TransactionStepper({
         const invoiceDetail = await invoiceRes.json();
 
         setInvoiceData(invoiceDetail);
+        const generateImageURL = await generateInvoiceImage();
+        if (!generateImageURL) throw new Error("Failed generate image URL");
+
+        // ✅ PATCH the image URL to your backend
+        const patchRes = await fetch(`/api/invoice/${invoiceDetail.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: generateImageURL }),
+        });
+
+        if (!patchRes.ok) throw new Error("Failed to patch generate image URL");
+
+        notification.success({ message: "Invoice generated" });
         setLoading(false);
         messageApi.destroy;
       } catch (err) {

@@ -49,15 +49,13 @@ export const formatDateTime = (date) =>
 export const generateInvoiceImage = async () => {
   const element = document.getElementById("invoice-receipt");
   const canvas = await html2canvas(element);
-  // const imgData = canvas.toDataURL("image/png");
-  // setImagePreview(imgData); // 👈 show preview
 
   const blob = await new Promise((resolve) =>
     canvas.toBlob(resolve, "image/png")
   );
 
   const formData = new FormData();
-  formData.append("file", blob, "invoice.png");
+  formData.append("file", blob, `invoice-${Date.now()}.png`);
 
   const res = await fetch("/api/upload", {
     method: "POST",

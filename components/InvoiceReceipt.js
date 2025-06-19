@@ -1,5 +1,3 @@
-// components/InvoiceReceipt.jsx
-
 import { Typography } from "antd";
 const { Text } = Typography;
 
