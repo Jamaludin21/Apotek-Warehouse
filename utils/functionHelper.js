@@ -50,6 +50,8 @@ export const generateInvoiceImage = async () => {
   const element = document.getElementById("invoice-receipt");
   const canvas = await html2canvas(element);
 
+  if (!canvas) throw new Error("Failed to generate canvas");
+
   const blob = await new Promise((resolve) =>
     canvas.toBlob(resolve, "image/png")
   );
@@ -57,28 +59,92 @@ export const generateInvoiceImage = async () => {
   const formData = new FormData();
   formData.append("file", blob, `invoice-${Date.now()}.png`);
 
-  const res = await fetch("/api/upload", {
+  const res = await fetch("/api/invoice/upload", {
     method: "POST",
     body: formData,
   });
 
+  if (!res.ok) throw new Error("Failed to generate invoice");
+
   const result = await res.json();
-  return result.url; // use this to save to invoice.image
+  return result.url;
 };
 
-export const generatePdf = async () => {
-  const element = document.getElementById("invoice-receipt");
-  const canvas = await html2canvas(element);
-  const imgData = canvas.toDataURL("image/png");
+// export const generatePdf = async () => {
+//   const element = document.getElementById("invoice-receipt");
+//   const canvas = await html2canvas(element);
+//   const imgData = canvas.toDataURL("image/png");
 
-  const pdf = new jsPDF({
-    orientation: "portrait",
-    unit: "px",
-    format: [canvas.width, canvas.height],
-  });
+//   const pdf = new jsPDF({
+//     orientation: "portrait",
+//     unit: "px",
+//     format: [canvas.width, canvas.height],
+//   });
 
-  pdf.addImage(imgData, "PNG", 0, 0);
-  pdf.save("invoice.pdf");
+//   pdf.addImage(imgData, "PNG", 0, 0);
+//   pdf.save(invoice-${Date.now()}.pdf);
+// };
+
+export const generatePdf = async (imageUrl) => {
+  console.log(imageUrl);
+  try {
+    let imgData;
+    let imgWidth;
+    let imgHeight;
+
+    if (imageUrl) {
+      // ✅ 1. Load image from URL
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // Allow CORS for Blob images
+      img.src = imageUrl;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      // Create a canvas to get image size for scaling
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0);
+
+      imgData = canvas.toDataURL("image/png");
+      imgWidth = canvas.width;
+      imgHeight = canvas.height;
+    } else {
+      // ✅ 2. Render DOM to canvas if no imageUrl
+      const element = document.getElementById("invoice-receipt");
+      if (!element) throw new Error("Invoice element not found");
+
+      const canvas = await html2canvas(element, { scale: 2 });
+      imgData = canvas.toDataURL("image/png");
+      imgWidth = canvas.width;
+      imgHeight = canvas.height;
+    }
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: "a4",
+    });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+    const scaledWidth = imgWidth * ratio;
+    const scaledHeight = imgHeight * ratio;
+
+    const x = (pageWidth - scaledWidth) / 2;
+    const y = (pageHeight - scaledHeight) / 2;
+
+    pdf.addImage(imgData, "PNG", x, y, scaledWidth, scaledHeight);
+    pdf.save(`invoice-${Date.now()}.pdf`);
+  } catch (error) {
+    console.error("Failed to generate PDF:", error);
+  }
 };
 
 // Function Handling API

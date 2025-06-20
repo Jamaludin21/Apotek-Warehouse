@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/utils/functionHelper";
+import { formatCurrency, generatePdf } from "@/utils/functionHelper";
 import {
   Form,
   Input,
@@ -8,9 +8,17 @@ import {
   Card,
   Typography,
   Flex,
+  Modal,
 } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
+import { InvoiceReceipt } from "@/components/InvoiceReceipt";
+import { ButtonGeneric } from "../button/buttonGeneric";
+import {
+  CloseOutlined,
+  FilePdfOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 
 export const CustomerForm = ({ onChange }) => {
   return (
@@ -29,7 +37,7 @@ export const CustomerForm = ({ onChange }) => {
             label="Phone Number"
             rules={[{ required: true }]}
           >
-            <InputNumber style={{ width: "100%" }} />
+            <InputNumber addonBefore="0/+62" style={{ width: "100%" }} />
           </Form.Item>
         </Form>
       </Card>
@@ -139,7 +147,7 @@ export const ReviewTransaction = ({ dataCustomer, dataProduct }) => {
   );
 };
 
-export const InvoiceSummary = ({ data }) => {
+export const InvoiceSummary = ({ data, loadingInvoice }) => {
   const transaction = data?.transaction;
 
   const totalQty =
@@ -148,6 +156,26 @@ export const InvoiceSummary = ({ data }) => {
     transaction?.items.reduce((acc, item) => acc + item.totalPrice, 0) || 0;
   const ppn = totalPrice * 0.1;
   const grandTotal = totalPrice + ppn;
+
+  const modalInvoicePreview = () => {
+    Modal.info({
+      title: "Invoice Receipt",
+      content: <InvoiceReceipt data={data} />,
+      closable: true,
+      closeIcon: <CloseOutlined />,
+      footer: (
+        <Flex justify="end" className="mt-4" gap={8}>
+          <ButtonGeneric
+            key="pdf"
+            danger={true}
+            icon={<FilePdfOutlined />}
+            onclick={() => generatePdf()}
+            text="Export as PDF"
+          />
+        </Flex>
+      ),
+    });
+  };
 
   return (
     <Flex justify="center">
@@ -198,6 +226,16 @@ export const InvoiceSummary = ({ data }) => {
               <strong>Grand Total:</strong> {formatCurrency(grandTotal)}
             </Typography.Text>
           </Flex>
+        </Flex>
+        <Flex className="mt-6" justify="end">
+          <ButtonGeneric
+            type="primary"
+            onclick={modalInvoicePreview}
+            icon={<InfoCircleOutlined />}
+            text="Preview Invoice"
+            disable={loadingInvoice}
+            loading={loadingInvoice}
+          />
         </Flex>
       </Card>
     </Flex>

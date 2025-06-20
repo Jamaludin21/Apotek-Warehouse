@@ -12,6 +12,7 @@ export const mappedDataConstructor = (rawData, formatConfig) => {
   return rawData.map((item) => {
     const mapped = { key: item.id || item.key };
     if (item.productInvoices) mapped.productInvoices = item.productInvoices;
+    if (item.invoiceImageUrl) mapped.invoiceImageUrl = item.invoiceImageUrl;
     formatConfig.forEach(({ key, dataIndex, type, customFn }) => {
       let value;
 

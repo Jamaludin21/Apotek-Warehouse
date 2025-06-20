@@ -4,6 +4,7 @@ import {
   formatCurrency,
   formatDateTime,
   generateFilters,
+  generatePdf,
   getSorter,
   globalDelete,
 } from "./functionHelper";
@@ -12,7 +13,7 @@ import {
   AccountBookOutlined,
   DeleteOutlined,
   EditOutlined,
-  PrinterOutlined,
+  FilePdfOutlined,
 } from "@ant-design/icons";
 import { ButtonGeneric } from "@/components/button/buttonGeneric";
 import { ModalConfirm, ModalInfo } from "@/components/modal/genericModal";
@@ -318,19 +319,6 @@ export const columnTransactionConfig = [
     type: "string",
   },
   {
-    key: "status",
-    title: "Status",
-    dataIndex: "status",
-    type: "string",
-    render: (status) => {
-      let color = "orange";
-      if (status === "PAID") color = "green";
-      else if (status === "FAILED") color = "red";
-      else if (status === "CANCELLED") color = "volcano";
-      return <Tag color={color}>{camelText(status)}</Tag>;
-    },
-  },
-  {
     key: "productNames",
     title: "Products",
     dataIndex: "productNames",
@@ -388,22 +376,48 @@ export const columnTransactionConfig = [
     key: "action",
     title: <Flex justify="center">Action</Flex>,
     fixed: "right",
-    render: (record) => (
-      <Flex vertical justify="center" gap={8}>
-        <ButtonGeneric
-          variant="solid"
-          color="green"
-          icon={<PrinterOutlined />}
-          text="Print Invoice"
-        />
-      </Flex>
-    ),
+    render: (record) => {
+      const isImageAvailable = !!record.invoiceImageUrl;
+      return (
+        <Flex vertical justify="center" gap={8}>
+          <ButtonGeneric
+            danger={true}
+            disabled={!isImageAvailable}
+            icon={<FilePdfOutlined />}
+            onclick={() => generatePdf(record.invoiceImageUrl)}
+            text="Export as PDF"
+          />
+        </Flex>
+      );
+    },
   },
 ];
 
 export const columnCategoryConfig = [
   { title: "Category Name", dataIndex: "categoryName", type: "string" },
-  { title: "Description", dataIndex: "description", type: "string" },
-  { title: "Status", dataIndex: "status", type: "string" },
   { title: "Created Date", dataIndex: "createdDate", type: "date" },
+  { title: "Updated Date", dataIndex: "updatedDate", type: "date" },
+  {
+    title: "Actions",
+    fixed: "right",
+    render: (_, record) => (
+      <Flex>
+        <ButtonGeneric
+          onClick={() => {
+            form.setFieldsValue(record);
+            setEditing(record);
+            setOpen(true);
+          }}
+          text="Edit"
+          icon={<EditOutlined />}
+        />
+        <ButtonGeneric
+          danger
+          onClick={() => handleDelete(record.id)}
+          text="Delete"
+          icon={<DeleteOutlined />}
+        />
+      </Flex>
+    ),
+  },
 ];

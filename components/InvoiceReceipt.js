@@ -1,7 +1,5 @@
-import { Typography } from "antd";
-const { Text } = Typography;
+import { formatCurrency } from "@/utils/functionHelper";
 
-// InvoiceReceipt.jsx
 export const InvoiceReceipt = ({ data }) => {
   const transaction = data?.transaction;
   const totalQty =
@@ -18,16 +16,15 @@ export const InvoiceReceipt = ({ data }) => {
         fontFamily: "monospace",
         background: "#fff",
         padding: "20px",
-        width: "300px",
         border: "1px solid #000",
       }}
     >
       <div style={{ textAlign: "center", marginBottom: "10px" }}>
         <strong>APOTEK SEHAT BERSAMA 2</strong>
         <br />
-        Jl. Raya Pondok Kelapa Blok J13 No. 38
+        Pondok Kelapa Blok-J13 Nomor 3B, Jakarta Timur
         <br />
-        Telp: 081289220357
+        Telp: 087727162255
       </div>
 
       <div>
@@ -46,8 +43,8 @@ export const InvoiceReceipt = ({ data }) => {
           <div key={index}>
             {item.product.name}
             <br />
-            {item.quantity} x {item.unitPrice.toLocaleString()} ={" "}
-            {item.totalPrice.toLocaleString()}
+            {item.quantity} x {formatCurrency(item.unitPrice)} ={" "}
+            {formatCurrency(item.totalPrice)}
             <br />
           </div>
         ))}
@@ -56,12 +53,13 @@ export const InvoiceReceipt = ({ data }) => {
       <hr />
 
       <div>
-        <Text>Total Quantity: {totalQty.toLocaleString()}</Text>
-        Subtotal: {totalPrice.toLocaleString()}
+        Total Quantity: {totalQty}
         <br />
-        PPN 10%: {ppn.toLocaleString()}
+        Subtotal: {formatCurrency(totalPrice)}
         <br />
-        <strong>Total: {grandTotal.toLocaleString()}</strong>
+        PPN 10%: {formatCurrency(ppn)}
+        <br />
+        <strong>Total: {formatCurrency(grandTotal)}</strong>
       </div>
 
       <hr />
@@ -69,7 +67,7 @@ export const InvoiceReceipt = ({ data }) => {
       <div style={{ fontSize: "12px", textAlign: "center", marginTop: "10px" }}>
         Barang yang sudah dibeli tidak dapat dikembalikan
         <br />
-        WhatsApp: 081289220357
+        WhatsApp: 087727162255
       </div>
     </div>
   );

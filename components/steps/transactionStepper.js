@@ -14,6 +14,7 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import { generateInvoiceImage } from "@/utils/functionHelper";
+import { InvoiceReceipt } from "@/components/InvoiceReceipt";
 
 export default function TransactionStepper({
   propsState,
@@ -22,6 +23,7 @@ export default function TransactionStepper({
 }) {
   const [invoiceData, setInvoiceData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingInvoice, setLoadingInvoice] = useState(false);
   const [isTransactionSuccess, setIsTransactionSuccess] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [current, setCurrent] = useState(0);
@@ -56,6 +58,7 @@ export default function TransactionStepper({
   const next = async () => {
     if (current === 2) {
       setLoading(true);
+      setLoadingInvoice(false);
       setIsTransactionSuccess(false);
       messageApi.open({
         type: "loading",
@@ -84,31 +87,46 @@ export default function TransactionStepper({
           type: "loading",
           content: "Generating Invoice.....",
         });
+
         // Fetch invoice detail
         const invoiceRes = await fetch(`/api/invoice/${invoiceId}`);
         if (!invoiceRes.ok) throw new Error("Failed to fetch invoice details");
         const invoiceDetail = await invoiceRes.json();
 
+        setLoading(false);
         setInvoiceData(invoiceDetail);
-        const generateImageURL = await generateInvoiceImage();
-        if (!generateImageURL) throw new Error("Failed generate image URL");
+        setLoadingInvoice(true);
 
-        // ✅ PATCH the image URL to your backend
-        const patchRes = await fetch(`/api/invoice/${invoiceDetail.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: generateImageURL }),
-        });
+        // ✅ Wait for DOM render before capturing image
+        setTimeout(async () => {
+          try {
+            const generateImageURL = await generateInvoiceImage();
+            if (!generateImageURL) throw new Error("Failed generate image URL");
 
-        if (!patchRes.ok) throw new Error("Failed to patch generate image URL");
+            // ✅ PATCH the image URL to your backend
+            const patchRes = await fetch(`/api/invoice/${invoiceDetail.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ image: generateImageURL }),
+            });
 
-        notification.success({ message: "Invoice generated" });
-        setLoading(false);
-        messageApi.destroy;
+            if (!patchRes.ok)
+              throw new Error("Failed to patch invoice image URL");
+
+            notification.success({ message: "Invoice generated" });
+          } catch (err) {
+            console.error("Image Generation Error:", err);
+            notification.error({ message: err });
+          } finally {
+            setLoadingInvoice(false);
+            messageApi.destroy();
+          }
+        }, 500);
       } catch (err) {
-        console.error(err.message);
-        notification.error({ message: err.message });
+        console.error(err);
+        notification.error({ message: err });
         setLoading(false);
+        setLoadingInvoice(false);
         messageApi.destroy;
         return; // Don't proceed to invoice step
       }
@@ -163,8 +181,10 @@ export default function TransactionStepper({
     },
     {
       title: "Invoice",
-      content: <InvoiceSummary data={invoiceData} />,
-      icon: <BookOutlined />,
+      content: (
+        <InvoiceSummary data={invoiceData} loadingInvoice={loadingInvoice} />
+      ),
+      icon: loadingInvoice ? <LoadingOutlined /> : <BookOutlined />,
     },
   ];
 
@@ -210,40 +230,51 @@ export default function TransactionStepper({
   const CurrentStep = steps[current]?.content;
 
   return (
-    <Card title="Add New Transaction">
-      {contextHolder}
-      <Steps current={current} items={items} />
-      <div className="my-6">{CurrentStep}</div>
-      <Flex justify="end" className="mt-6" gap={8}>
-        {current < steps.length - 1 && (
-          <React.Fragment>
-            <Button danger onClick={onClose} disabled={loading}>
-              Cancel
-            </Button>
-            {current > 0 && (
-              <Button onClick={prev} disabled={loading}>
-                Previous
+    <React.Fragment>
+      {invoiceData && (
+        <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
+          <InvoiceReceipt data={invoiceData} />
+        </div>
+      )}
+      <Card title="Add New Transaction">
+        {contextHolder}
+        <Steps current={current} items={items} />
+        <div className="my-6">{CurrentStep}</div>
+        <Flex justify="end" className="mt-6" gap={8}>
+          {current < steps.length - 1 && (
+            <React.Fragment>
+              <Button
+                danger
+                onClick={onClose}
+                disabled={loading || loadingInvoice}
+              >
+                Cancel
               </Button>
-            )}
+              {current > 0 && (
+                <Button onClick={prev} disabled={loading || loadingInvoice}>
+                  Previous
+                </Button>
+              )}
+              <Button
+                type="primary"
+                onClick={next}
+                disabled={!isStepValid()}
+                loading={loading || loadingInvoice}
+              >
+                Next
+              </Button>
+            </React.Fragment>
+          )}
+          {current === steps.length - 1 && (
             <Button
               type="primary"
-              onClick={next}
-              disabled={!isStepValid()}
-              loading={loading}
+              onClick={() => (window.location.href = "/panel/transactions")}
             >
-              Next
+              Back to Transactions
             </Button>
-          </React.Fragment>
-        )}
-        {current === steps.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => (window.location.href = "/transaction")}
-          >
-            Back to Transactions
-          </Button>
-        )}
-      </Flex>
-    </Card>
+          )}
+        </Flex>
+      </Card>
+    </React.Fragment>
   );
 }

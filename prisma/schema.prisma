@@ -12,13 +12,6 @@ enum Role {
   KEEPER
 }
 
-enum TransactionStatus {
-  PENDING
-  PAID
-  FAILED
-  CANCELLED
-}
-
 // =============================
 // USER MODEL
 // =============================
@@ -107,7 +100,6 @@ model Transaction {
   id           Int               @id @default(autoincrement())
   custName     String
   phone        String?
-  status       TransactionStatus @default(PENDING)
   items        TransactionItem[]
   createdById  String
   createdBy    User              @relation("TransactionCreator", fields: [createdById], references: [id], onDelete: Cascade)

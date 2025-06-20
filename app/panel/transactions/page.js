@@ -11,6 +11,7 @@ export default async function TransactionsPage() {
   const transaction = await prisma.transaction.findMany({
     include: {
       createdBy: true,
+      invoice: true,
       items: {
         include: {
           product: {
@@ -31,6 +32,7 @@ export default async function TransactionsPage() {
     productCategories: [
       ...new Set(t.items.map((i) => i.product?.category?.name).filter(Boolean)),
     ].join(", "),
+    invoiceImageUrl: t.invoice?.image || null, // ✅ for export
   }));
 
   const formattedTransaction = mappedDataConstructor(

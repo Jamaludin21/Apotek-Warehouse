@@ -41,3 +41,28 @@ export async function GET(_, { params }) {
     );
   }
 }
+
+export async function PATCH(req, { params }) {
+  const id = parseInt(params.id);
+  const body = await req.json();
+  const { image } = body;
+
+  if (!image) {
+    return NextResponse.json({ error: "No image provided" }, { status: 400 });
+  }
+
+  try {
+    const updated = await prisma.invoice.update({
+      where: { id },
+      data: { image },
+    });
+
+    return NextResponse.json({ success: true, data: updated });
+  } catch (error) {
+    console.error("[PATCH INVOICE ERROR]", error);
+    return NextResponse.json(
+      { error: true, message: "Failed to update invoice image" },
+      { status: 500 }
+    );
+  }
+}
