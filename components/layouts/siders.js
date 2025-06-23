@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import {
   AppstoreOutlined,
   ControlOutlined,
+  GroupOutlined,
   LogoutOutlined,
   ProductOutlined,
   TransactionOutlined,
@@ -57,6 +58,18 @@ const SidebarItems = () => {
         />
       ),
       icon: <ControlOutlined />,
+      roles: ["MANAGER"],
+    },
+    {
+      key: "categories",
+      label: (
+        <LabelSidebar
+          path="/panel/categories"
+          label="Manage Category"
+          pathname={pathname}
+        />
+      ),
+      icon: <GroupOutlined />,
       roles: ["MANAGER"],
     },
     {

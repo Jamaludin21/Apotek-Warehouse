@@ -90,7 +90,7 @@ export const columnUsersConfig = [
     render: (
       record,
       { showModal },
-      { session, apiUri },
+      { session, apiUri, messageApi },
       { setEditState, setEditData, setLoadingTable, router }
     ) => (
       <Flex vertical justify="center" gap={8}>
@@ -116,9 +116,16 @@ export const columnUsersConfig = [
               title: "Are you sure?",
               content: `Delete user "${record.name}"?`,
               okText: "Yes",
+              okButtonProps: { danger: true },
               cancelText: "Cancel",
               onOk: async () =>
-                await globalDelete({ record, router, apiUri, setLoadingTable }),
+                await globalDelete({
+                  record,
+                  router,
+                  apiUri,
+                  messageApi,
+                  setLoadingTable,
+                }),
             });
           }}
         />
@@ -238,7 +245,7 @@ export const columnProductConfig = [
     render: (
       record,
       { showModal },
-      { apiUri },
+      { apiUri, messageApi },
       { setEditState, setEditData, setLoadingTable, router }
     ) => (
       <Flex vertical justify="center" gap={8}>
@@ -288,12 +295,14 @@ export const columnProductConfig = [
               title: "Are you sure?",
               content: `Delete product "${record.name}"?`,
               okText: "Yes",
+              okButtonProps: { danger: true },
               cancelText: "Cancel",
               onOk: async () =>
                 await globalDelete({
                   record,
                   router,
                   apiUri,
+                  messageApi,
                   setLoadingTable,
                 }),
             });
@@ -394,26 +403,56 @@ export const columnTransactionConfig = [
 ];
 
 export const columnCategoryConfig = [
-  { title: "Category Name", dataIndex: "categoryName", type: "string" },
-  { title: "Created Date", dataIndex: "createdDate", type: "date" },
-  { title: "Updated Date", dataIndex: "updatedDate", type: "date" },
   {
-    title: "Actions",
+    key: "name",
+    title: "Category Name",
+    dataIndex: "name",
+    type: "string",
+    fixed: "left",
+  },
+  {
+    key: "createdAt",
+    title: "Created Date",
+    dataIndex: "createdAt",
+    type: "date",
+  },
+  {
+    key: "updatedAt",
+    title: "Updated Date",
+    dataIndex: "updatedAt",
+    type: "date",
+  },
+  {
+    key: "action",
+    title: <Flex justify="center">Action</Flex>,
     fixed: "right",
-    render: (_, record) => (
-      <Flex>
-        <ButtonGeneric
-          onClick={() => {
-            form.setFieldsValue(record);
-            setEditing(record);
-            setOpen(true);
-          }}
-          text="Edit"
-          icon={<EditOutlined />}
-        />
+    width: "200px",
+    render: (
+      record,
+      _,
+      { apiUri, messageApi },
+      { setLoadingTable, router }
+    ) => (
+      <Flex justify="center" gap={8}>
         <ButtonGeneric
           danger
-          onClick={() => handleDelete(record.id)}
+          onclick={() =>
+            ModalConfirm({
+              title: "Are you sure?",
+              content: `Delete category "${record.name}"?`,
+              okText: "Yes",
+              okButtonProps: { danger: true },
+              cancelText: "Cancel",
+              onOk: async () =>
+                await globalDelete({
+                  record,
+                  router,
+                  apiUri,
+                  messageApi,
+                  setLoadingTable,
+                }),
+            })
+          }
           text="Delete"
           icon={<DeleteOutlined />}
         />

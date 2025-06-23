@@ -23,75 +23,68 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        username: "Jamaludin21",
+        username: "icad21",
         password: passwordHash,
         role: "MANAGER",
-        name: "Jamaludin Hakim Harsoyo",
-        email: "jamaludin.harsoyo@asaba.co.id",
-      },
-      {
-        username: "Alvin21",
-        password: passwordHash,
-        role: "MANAGER",
-        name: "Muhammad Alfain",
-        email: "msalfain@gmail.com",
+        name: "Icad",
+        email: "icad21@gmail.com",
       },
     ],
   });
 
-  // Create Keeper Users
-  const keeperUsers = [];
-  for (let i = 1; i <= 5; i++) {
-    const keeper = await prisma.user.create({
-      data: {
-        username: `keeper${i}`,
-        password: passwordHash,
-        role: "KEEPER",
-        name: `Keeper ${i}`,
-        email: `keeper${i}@example.com`,
-      },
-    });
-    keeperUsers.push(keeper);
-  }
+  // // Create Keeper Users
+  // const keeperUsers = [];
+  // for (let i = 1; i <= 5; i++) {
+  //   const keeper = await prisma.user.create({
+  //     data: {
+  //       username: `keeper${i}`,
+  //       password: passwordHash,
+  //       role: "KEEPER",
+  //       name: `Keeper ${i}`,
+  //       email: `keeper${i}@example.com`,
+  //     },
+  //   });
+  //   keeperUsers.push(keeper);
+  // }
 
-  // Create Categories
-  const categoryNames = [
-    "Electronics",
-    "Groceries",
-    "Clothing",
-    "Stationery",
-    "Health",
-  ];
-  const categories = [];
-  for (let name of categoryNames) {
-    const category = await prisma.category.create({ data: { name } });
-    categories.push(category);
-  }
+  // // Create Categories
+  // const categoryNames = [
+  //   "Electronics",
+  //   "Groceries",
+  //   "Clothing",
+  //   "Stationery",
+  //   "Health",
+  // ];
+  // const categories = [];
+  // for (let name of categoryNames) {
+  //   const category = await prisma.category.create({ data: { name } });
+  //   categories.push(category);
+  // }
 
-  // Create Products
-  const products = [];
-  for (let j = 1; j <= 20; j++) {
-    const randomCategory =
-      categories[Math.floor(Math.random() * categories.length)];
-    const randomKeeper =
-      keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
+  // // Create Products
+  // const products = [];
+  // for (let j = 1; j <= 20; j++) {
+  //   const randomCategory =
+  //     categories[Math.floor(Math.random() * categories.length)];
+  //   const randomKeeper =
+  //     keeperUsers[Math.floor(Math.random() * keeperUsers.length)];
 
-    const price = getRandomRupiah();
+  //   const price = getRandomRupiah();
 
-    const product = await prisma.product.create({
-      data: {
-        name: `Product ${j}`,
-        description: `Description for Product ${j}`,
-        image: `https://picsum.photos/200?random=${j}`,
-        price,
-        stock: Math.floor(Math.random() * 50) + 10,
-        categoryId: randomCategory.id,
-        createdById: randomKeeper.id,
-      },
-    });
+  //   const product = await prisma.product.create({
+  //     data: {
+  //       name: `Product ${j}`,
+  //       description: `Description for Product ${j}`,
+  //       image: `https://picsum.photos/200?random=${j}`,
+  //       price,
+  //       stock: Math.floor(Math.random() * 50) + 10,
+  //       categoryId: randomCategory.id,
+  //       createdById: randomKeeper.id,
+  //     },
+  //   });
 
-    products.push(product);
-  }
+  //   products.push(product);
+  // }
 
   // // Create Transactions with Invoice
   // for (let k = 1; k <= 15; k++) {

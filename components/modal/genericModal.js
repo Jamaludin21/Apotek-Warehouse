@@ -36,6 +36,7 @@ export const GenericModalForm = ({ propsHandle = {}, propsValue = {} }) => {
       open={openModal}
       onOk={async () => await handleSubmit()}
       onCancel={handleCancel}
+      cancelButtonProps={{ danger: true }}
       confirmLoading={loadingfetch}
       destroyOnHidden
       className="centered-modal"
@@ -85,6 +86,8 @@ export const ModalConfirm = (props) => {
     cancelText = "",
     onCancel,
     onOk,
+    okButtonProps = {},
+    cancelButtonProps = {},
     icon = "",
   } = props;
   return confirm({
@@ -94,7 +97,9 @@ export const ModalConfirm = (props) => {
     okText: okText,
     cancelText: cancelText,
     onOk: onOk,
+    okButtonProps: okButtonProps,
     onCancel: onCancel,
+    cancelButtonProps: cancelButtonProps,
     icon: icon,
     className: "centered-modal",
   });

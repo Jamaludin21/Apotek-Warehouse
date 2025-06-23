@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, notification } from "antd";
 import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -171,9 +171,13 @@ export const globalSubmit = async ({
     router,
   } = propsState;
 
-  const { editState, apiUri, editData } = propsValue;
+  const { editState, apiUri, editData, messageApi } = propsValue;
   const values = await form.getFieldsValue();
   setLoadingFetch(true);
+  messageApi.open({
+    type: "loading",
+    content: "Processing submit...",
+  });
 
   try {
     if (editState) {
@@ -182,16 +186,16 @@ export const globalSubmit = async ({
       await axios.post(`/api/${apiUri}`, values);
     }
 
-    message.success(
-      editState
+    notification.success({
+      message: editState
         ? `${camelText(apiUri)} updated!`
-        : `${camelText(apiUri)} created!`
-    );
+        : `${camelText(apiUri)} created!`,
+    });
 
     setLoadingTable(true);
     router.refresh();
   } catch (error) {
-    message.error(error?.message || "Failed to submit form");
+    notification.error({ message: error || "Failed to submit form" });
     console.log(error);
     setLoadingFetch(false);
     if (editState) setEditState(false);
@@ -200,7 +204,7 @@ export const globalSubmit = async ({
     setOpenModal(false);
     setLoadingFetch(false);
     if (editState) setEditState(false);
-
+    messageApi.destroy;
     setTimeout(() => {
       setLoadingTable(false);
     }, 500);
@@ -211,17 +215,23 @@ export const globalDelete = async ({
   record,
   router,
   apiUri,
+  messageApi,
   setLoadingTable,
 }) => {
+  messageApi.open({
+    type: "loading",
+    content: "Processing delete...",
+  });
   try {
     await axios.delete(`/api/${apiUri}/${record.key}`);
-    message.success(`${camelText(apiUri)} deleted!`);
+    notification.success({ message: `${camelText(apiUri)} deleted!` });
     router.refresh();
     setLoadingTable(true);
   } catch (err) {
-    message.error(err?.message || "Delete failed");
+    notification.error({ message: err || "Delete failed" });
     console.log(err);
   } finally {
+    messageApi.destroy;
     setTimeout(() => setLoadingTable(false), 500);
   }
 };

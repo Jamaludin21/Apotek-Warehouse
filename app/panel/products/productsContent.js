@@ -6,7 +6,7 @@ import { columnProductConfig } from "@/utils/columnHelper";
 import { productFields } from "@/utils/fieldHelper";
 import { globalSubmit } from "@/utils/functionHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
-import { Card, Form } from "antd";
+import { Card, Form, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,6 +19,7 @@ export default function ProductContent({ formattedProduct, categories, user }) {
   const [editData, setEditData] = useState(null);
   const [loadingfetch, setLoadingFetch] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = () => {
     setOpenModal(true);
@@ -51,6 +52,7 @@ export default function ProductContent({ formattedProduct, categories, user }) {
         value: value.id,
       })),
     session: user,
+    messageApi,
   };
 
   const propsState = {
@@ -70,6 +72,7 @@ export default function ProductContent({ formattedProduct, categories, user }) {
 
   return (
     <Card>
+      {contextHolder}
       {loadingTable ? (
         <DynamicSkeleton />
       ) : (

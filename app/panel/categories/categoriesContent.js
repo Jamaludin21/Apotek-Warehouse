@@ -1,22 +1,20 @@
 "use client";
 
-import { GenericTable } from "@/components/tables/genericTable";
-import { columnUsersConfig } from "@/utils/columnHelper";
-import { userFields } from "@/utils/fieldHelper";
-import { useDocumentTitle } from "@/utils/useDocumentTitle";
-import { Card, Form, message } from "antd";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Form, Card, message } from "antd";
+import { GenericTable } from "@/components/tables/genericTable";
+import { columnCategoryConfig } from "@/utils/columnHelper";
+import { categoryFields } from "@/utils/fieldHelper";
+import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { globalSubmit } from "@/utils/functionHelper";
+import { useRouter } from "next/navigation";
 import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
 
-export default function UsersContent({ session, formattedUsers }) {
+export default function CategoriesContent({ user, formattedCategories }) {
   useDocumentTitle();
   const [form] = Form.useForm();
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
-  const [editState, setEditState] = useState(false);
-  const [editData, setEditData] = useState(null);
   const [loadingfetch, setLoadingFetch] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -31,28 +29,22 @@ export default function UsersContent({ session, formattedUsers }) {
   const handleCancel = () => {
     form.resetFields();
     setOpenModal(false);
-    setEditState(false);
-    setEditData(null);
   };
 
   const propsValue = {
     form,
     openModal,
-    fields: userFields,
-    modalTitle: editState ? "Edit Data User" : "Add New User",
-    editState,
-    editData,
-    session,
+    fields: categoryFields,
+    modalTitle: "Add New Category",
     loadingfetch,
     loadingTable,
-    apiUri: "user",
+    apiUri: "category",
+    session: user,
     messageApi,
   };
 
   const propsState = {
     setOpenModal,
-    setEditData,
-    setEditState,
     setLoadingFetch,
     setLoadingTable,
     router,
@@ -71,9 +63,9 @@ export default function UsersContent({ session, formattedUsers }) {
         <DynamicSkeleton />
       ) : (
         <GenericTable
-          title="Available Users List"
-          data={formattedUsers}
-          config={columnUsersConfig}
+          title="Category Product"
+          data={formattedCategories}
+          config={columnCategoryConfig}
           propsHandle={propsHandle}
           propsValue={propsValue}
           propsState={propsState}
