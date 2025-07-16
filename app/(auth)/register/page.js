@@ -22,7 +22,7 @@ export default function RegisterPage() {
         redirect: true,
         username: values.username,
         password: values.password,
-        callbackUrl: "/panel/overview",
+        callbackUrl: "/overview",
       });
     } else {
       console.error("Registration failed", data);

@@ -6,16 +6,7 @@ import { columnUsersConfig } from "@/utils/columnHelper";
 
 export default async function UsersPage() {
   const users = await prisma.user.findMany({
-    orderBy: [{ id: "asc" }, { name: "asc" }],
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      username: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    orderBy: [{ role: "asc" }, { name: "asc" }],
   });
 
   const formattedUsers = mappedDataConstructor(users, columnUsersConfig);

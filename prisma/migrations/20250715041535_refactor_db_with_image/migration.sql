@@ -7,6 +7,7 @@ CREATE TABLE "User" (
     "name" TEXT,
     "username" TEXT NOT NULL,
     "email" TEXT,
+    "avatar" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'KEEPER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -30,7 +31,7 @@ CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "image" TEXT,
+    "fileUrl" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "stock" INTEGER NOT NULL DEFAULT 0,
     "categoryId" INTEGER NOT NULL,
@@ -44,7 +45,7 @@ CREATE TABLE "Product" (
 -- CreateTable
 CREATE TABLE "Invoice" (
     "id" SERIAL NOT NULL,
-    "image" TEXT NOT NULL,
+    "fileUrl" TEXT NOT NULL,
     "transactionId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

@@ -5,15 +5,15 @@ export async function middleware(req) {
   const token = req.cookies.get("session")?.value;
   const user = token ? verifySession(token) : null;
 
-  const isProtected = req.nextUrl.pathname.startsWith("/panel");
+  const isProtected = req.nextUrl.pathname.startsWith("/");
 
   if (isProtected && !user) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/panel/:path*"],
+  matcher: ["/:path*"],
 };

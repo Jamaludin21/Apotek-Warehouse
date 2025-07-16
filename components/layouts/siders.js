@@ -32,18 +32,14 @@ const LabelSidebar = ({ path, label, pathname }) => {
 const SidebarItems = () => {
   const { session } = useAppContext();
   const pathname = usePathname();
-  const selectedKey = pathname.split("/panel/")[1];
+  const selectedKey = pathname.split("/")[1];
   const role = session?.role;
 
   const items = [
     {
       key: "overview",
       label: (
-        <LabelSidebar
-          path="/panel/overview"
-          label="Overview"
-          pathname={pathname}
-        />
+        <LabelSidebar path="/overview" label="Overview" pathname={pathname} />
       ),
       icon: <AppstoreOutlined />,
       roles: ["MANAGER", "KEEPER"],
@@ -51,11 +47,7 @@ const SidebarItems = () => {
     {
       key: "users",
       label: (
-        <LabelSidebar
-          path="/panel/users"
-          label="Manage User"
-          pathname={pathname}
-        />
+        <LabelSidebar path="/users" label="Manage User" pathname={pathname} />
       ),
       icon: <ControlOutlined />,
       roles: ["MANAGER"],
@@ -64,7 +56,7 @@ const SidebarItems = () => {
       key: "categories",
       label: (
         <LabelSidebar
-          path="/panel/categories"
+          path="/categories"
           label="Manage Category"
           pathname={pathname}
         />
@@ -76,7 +68,7 @@ const SidebarItems = () => {
       key: "products",
       label: (
         <LabelSidebar
-          path="/panel/products"
+          path="/products"
           label={role == "MANAGER" ? "Product" : "Stock Product"}
           pathname={pathname}
         />
@@ -88,7 +80,7 @@ const SidebarItems = () => {
       key: "transactions",
       label: (
         <LabelSidebar
-          path="/panel/transactions"
+          path="/transactions"
           label="Transaction"
           pathname={pathname}
         />

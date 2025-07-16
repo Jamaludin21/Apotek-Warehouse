@@ -45,16 +45,16 @@ export async function GET(_, { params }) {
 export async function PATCH(req, { params }) {
   const id = parseInt(params.id);
   const body = await req.json();
-  const { image } = body;
+  const { fileUrl } = body;
 
-  if (!image) {
+  if (!fileUrl) {
     return NextResponse.json({ error: "No image provided" }, { status: 400 });
   }
 
   try {
     const updated = await prisma.invoice.update({
       where: { id },
-      data: { image },
+      data: { fileUrl },
     });
 
     return NextResponse.json({ success: true, data: updated });

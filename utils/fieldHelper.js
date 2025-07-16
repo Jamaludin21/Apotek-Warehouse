@@ -1,4 +1,6 @@
-export const userFields = [
+import { validateUploadImage } from "./functionHelper";
+
+export const userFields = (setIsImageValid) => [
   {
     label: "Name",
     name: "name",
@@ -6,6 +8,7 @@ export const userFields = [
     placeholder: "Enter name",
     rules: [{ required: true }],
   },
+
   {
     label: "Username",
     name: "username",
@@ -20,9 +23,21 @@ export const userFields = [
     placeholder: "Enter email",
     rules: [{ required: true, type: "email" }],
   },
+  {
+    name: "avatar",
+    label: "Upload Image",
+    type: "upload",
+    required: true,
+    rules: [{ required: true, message: "Image must be uploaded" }],
+    props: {
+      listType: "picture-card",
+      maxCount: 1,
+      beforeUpload: (file) => validateUploadImage(file, setIsImageValid),
+    },
+  },
 ];
 
-export const productFields = [
+export const productFields = (setIsImageValid) => [
   {
     label: "Product Name",
     name: "name",
@@ -40,13 +55,6 @@ export const productFields = [
     },
   },
   {
-    label: "Description",
-    name: "description",
-    type: "textarea",
-    placeholder: "Enter product description",
-    rules: [{ required: true }],
-  },
-  {
     label: "Price",
     name: "price",
     type: "number",
@@ -59,6 +67,25 @@ export const productFields = [
     type: "number",
     placeholder: "Enter stock quantity",
     rules: [{ required: true }],
+  },
+  {
+    label: "Description",
+    name: "description",
+    type: "textarea",
+    placeholder: "Enter product description",
+    rules: [{ required: true }],
+  },
+  {
+    name: "fileUrl",
+    label: "Upload Image",
+    type: "upload",
+    required: true,
+    rules: [{ required: true, message: "Image must be uploaded" }],
+    props: {
+      listType: "picture-card",
+      maxCount: 1,
+      beforeUpload: (file) => validateUploadImage(file, setIsImageValid),
+    },
   },
 ];
 

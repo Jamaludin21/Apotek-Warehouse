@@ -7,6 +7,6 @@ export default async function Home() {
   const session = sessionToken ? verifySession(sessionToken) : null;
 
   if (!session) {
-    redirect("/auth/login");
-  } else redirect("/panel/overview");
+    redirect("/login");
+  } else redirect("/overview");
 }

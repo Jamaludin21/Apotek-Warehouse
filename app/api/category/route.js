@@ -19,13 +19,9 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    console.log(body);
-
     const existing = await prisma.category.findUnique({
       where: { name: body.name },
     });
-
-    console.log(existing);
 
     if (existing) {
       return NextResponse.json(

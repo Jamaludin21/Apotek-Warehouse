@@ -14,7 +14,7 @@ export async function POST(req) {
     const newProduct = await prisma.product.create({
       data: {
         ...data,
-        image: data.image || "https://picsum.photos/200",
+        fileUrl: data.fileUrl || "https://picsum.photos/200",
         createdBy: {
           connect: { id: user.id },
         },

@@ -71,7 +71,7 @@ export async function POST(req) {
     const invoice = await prisma.invoice.create({
       data: {
         transactionId: transactionResult.transactionId,
-        image: "https://picsum.photos/200", // placeholder
+        fileUrl: "https://picsum.photos/200", // placeholder
         productInvoices: {
           create: products.map((product) => ({
             productId: product.key,

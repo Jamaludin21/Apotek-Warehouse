@@ -27,8 +27,8 @@ export default function TransactionStepper({
   const [isTransactionSuccess, setIsTransactionSuccess] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [current, setCurrent] = useState(0);
-  const { setFormData } = propsState;
-  const { formData, formattedProduct, session } = propsValue;
+  const { setFormData, setScrollY } = propsState;
+  const { formData, formattedProduct, session, scrollY } = propsValue;
   const stepKeys = useMemo(
     () => ["customer", "products", "transaction", "invoice"],
     []
@@ -107,7 +107,7 @@ export default function TransactionStepper({
             const patchRes = await fetch(`/api/invoice/${invoiceDetail.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ image: generateImageURL }),
+              body: JSON.stringify({ fileUrl: generateImageURL }),
             });
 
             if (!patchRes.ok)
@@ -162,8 +162,8 @@ export default function TransactionStepper({
         <ProductAssignment
           data={formattedProduct}
           onChange={handleFormChange}
-          next={next}
-          prev={prev}
+          setScrollY={setScrollY}
+          scrollY={scrollY}
         />
       ),
       icon: <ProductOutlined />,
@@ -268,7 +268,7 @@ export default function TransactionStepper({
           {current === steps.length - 1 && (
             <Button
               type="primary"
-              onClick={() => (window.location.href = "/panel/transactions")}
+              onClick={() => (window.location.href = "/transactions")}
             >
               Back to Transactions
             </Button>

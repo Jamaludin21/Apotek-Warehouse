@@ -1,24 +1,28 @@
 "use client";
 
+import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
 import { GenericTable } from "@/components/tables/genericTable";
-import { columnUsersConfig } from "@/utils/columnHelper";
-import { userFields } from "@/utils/fieldHelper";
+import { columnProductConfig } from "@/utils/columnHelper";
+import { productFields } from "@/utils/fieldHelper";
+import { globalSubmit } from "@/utils/functionHelper";
 import { useDocumentTitle } from "@/utils/useDocumentTitle";
 import { Card, Form, message } from "antd";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { globalSubmit } from "@/utils/functionHelper";
-import { DynamicSkeleton } from "@/components/skeleton/dynamicSkeleton";
+import { useState } from "react";
 
-export default function UsersContent({ session, formattedUsers }) {
+export default function ProductContent({ formattedProduct, categories, user }) {
   useDocumentTitle();
   const [form] = Form.useForm();
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const [editState, setEditState] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [FormValid, setFormValid] = useState(false);
+  const [uploadFileList, setUploadFileList] = useState([]);
+  const [isImageValid, setIsImageValid] = useState(false);
   const [loadingfetch, setLoadingFetch] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [scrollY, setScrollY] = useState(400);
   const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = () => {
@@ -31,6 +35,8 @@ export default function UsersContent({ session, formattedUsers }) {
   const handleCancel = () => {
     form.resetFields();
     setOpenModal(false);
+    setFormValid(false);
+    setIsImageValid(false);
     setEditState(false);
     setEditData(null);
   };
@@ -38,23 +44,36 @@ export default function UsersContent({ session, formattedUsers }) {
   const propsValue = {
     form,
     openModal,
-    fields: userFields,
-    modalTitle: editState ? "Edit Data User" : "Add New User",
+    FormValid,
+    isImageValid,
+    fields: productFields(setIsImageValid),
+    modalTitle: editState ? "Edit Data Product" : "Add New Product",
     editState,
     editData,
-    session,
+    uploadFileList,
     loadingfetch,
     loadingTable,
-    apiUri: "user",
+    apiUri: "product",
+    categoryOptions:
+      categories &&
+      categories.map((value) => ({
+        label: value.name,
+        value: value.id,
+      })),
+    session: user,
     messageApi,
+    scrollY,
   };
 
   const propsState = {
     setOpenModal,
     setEditData,
     setEditState,
+    setFormValid,
+    setUploadFileList,
     setLoadingFetch,
     setLoadingTable,
+    setScrollY,
     router,
   };
 
@@ -71,9 +90,9 @@ export default function UsersContent({ session, formattedUsers }) {
         <DynamicSkeleton />
       ) : (
         <GenericTable
-          title="Available Users List"
-          data={formattedUsers}
-          config={columnUsersConfig}
+          title="Product Inventory"
+          data={formattedProduct}
+          config={columnProductConfig}
           propsHandle={propsHandle}
           propsValue={propsValue}
           propsState={propsState}

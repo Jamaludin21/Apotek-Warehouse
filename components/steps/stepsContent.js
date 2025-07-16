@@ -13,7 +13,7 @@ import {
 import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
 import { InvoiceReceipt } from "@/components/InvoiceReceipt";
-import { ButtonGeneric } from "../button/buttonGeneric";
+import { ButtonGeneric } from "@/components/button/buttonGeneric";
 import {
   CloseOutlined,
   FilePdfOutlined,
@@ -45,7 +45,7 @@ export const CustomerForm = ({ onChange }) => {
   );
 };
 
-export const ProductAssignment = ({ data, onChange }) => {
+export const ProductAssignment = ({ data, onChange, setScrollY, scrollY }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [quantities, setQuantities] = useState({});
 
@@ -59,6 +59,19 @@ export const ProductAssignment = ({ data, onChange }) => {
 
     onChange?.(null, updatedProducts);
   }, [selectedRowKeys, quantities, data, onChange]);
+
+  useEffect(() => {
+    const updateScrollY = () => {
+      const offset = 350; // Adjust this value based on your header, footer, etc.
+      const height = window.innerHeight - offset;
+      setScrollY(height > 300 ? height : 300); // minimum height guard
+    };
+
+    updateScrollY(); // initial
+    window.addEventListener("resize", updateScrollY);
+
+    return () => window.removeEventListener("resize", updateScrollY);
+  }, [setScrollY]);
 
   const handleQuantityChange = (productId, value) => {
     setQuantities((prev) => ({
@@ -80,7 +93,7 @@ export const ProductAssignment = ({ data, onChange }) => {
       }}
       rowKey="key"
       dataSource={data}
-      scroll={{ x: 1200, y: 55 * 6 }}
+      scroll={{ x: 1200, y: scrollY }}
       pagination={false}
       columns={[
         { title: "Product", dataIndex: "name" },

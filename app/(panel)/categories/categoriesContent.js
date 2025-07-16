@@ -15,11 +15,14 @@ export default function CategoriesContent({ user, formattedCategories }) {
   const [form] = Form.useForm();
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
+  const [FormValid, setFormValid] = useState(false);
   const [loadingfetch, setLoadingFetch] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [scrollY, setScrollY] = useState(400);
   const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = () => {
+    form.resetFields();
     setOpenModal(true);
   };
 
@@ -29,6 +32,7 @@ export default function CategoriesContent({ user, formattedCategories }) {
   const handleCancel = () => {
     form.resetFields();
     setOpenModal(false);
+    setFormValid(false);
   };
 
   const propsValue = {
@@ -41,6 +45,8 @@ export default function CategoriesContent({ user, formattedCategories }) {
     apiUri: "category",
     session: user,
     messageApi,
+    scrollY,
+    FormValid,
   };
 
   const propsState = {
@@ -48,6 +54,8 @@ export default function CategoriesContent({ user, formattedCategories }) {
     setLoadingFetch,
     setLoadingTable,
     router,
+    setFormValid,
+    setScrollY,
   };
 
   const propsHandle = {

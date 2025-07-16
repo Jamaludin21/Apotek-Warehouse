@@ -42,7 +42,7 @@ export default function LoginPage() {
           message: "Login Success",
           description: "Please wait to redirect into dashboard",
         });
-        router.push("/panel/overview");
+        router.push("/overview");
       } else {
         messageApi.destroy;
         notification.error({ message: data.error });

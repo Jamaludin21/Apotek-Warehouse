@@ -19,7 +19,7 @@ export default function ClientLayout({ children, session }) {
   const propsValue = { colorBgContainer, borderRadiusLG, session };
 
   if (!session) {
-    window.location.href = "/auth/login";
+    window.location.href = "/login";
   }
 
   return (

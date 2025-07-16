@@ -26,6 +26,8 @@ async function main() {
         username: "icad21",
         password: passwordHash,
         role: "MANAGER",
+        avatar:
+          "https://qxmbaubk8q2hzcre.public.blob.vercel-storage.com/user/images-qdf6HIPZ9uxqLV59TU9PpvQ5eYSMf2.png",
         name: "Icad",
         email: "icad21@gmail.com",
       },
@@ -33,19 +35,20 @@ async function main() {
   });
 
   // // Create Keeper Users
-  // const keeperUsers = [];
-  // for (let i = 1; i <= 5; i++) {
-  //   const keeper = await prisma.user.create({
-  //     data: {
-  //       username: `keeper${i}`,
-  //       password: passwordHash,
-  //       role: "KEEPER",
-  //       name: `Keeper ${i}`,
-  //       email: `keeper${i}@example.com`,
-  //     },
-  //   });
-  //   keeperUsers.push(keeper);
-  // }
+  const keeperUsers = [];
+  for (let i = 1; i <= 5; i++) {
+    const keeper = await prisma.user.create({
+      data: {
+        username: `keeper${i}`,
+        password: passwordHash,
+        avatar: `https://picsum.photos/200?random=${i}`,
+        role: "KEEPER",
+        name: `Keeper ${i}`,
+        email: `keeper${i}@example.com`,
+      },
+    });
+    keeperUsers.push(keeper);
+  }
 
   // // Create Categories
   // const categoryNames = [

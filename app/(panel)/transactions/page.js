@@ -28,11 +28,11 @@ export default async function TransactionsPage() {
     ...t,
     total: t.items.reduce((sum, item) => sum + item.totalPrice, 0),
     productNames: t.items.map((i) => i.product?.name).join(", "),
-    productImages: t.items.map((i) => i.product?.image).filter(Boolean),
+    productImages: t.items.map((i) => i.product?.fileUrl).filter(Boolean),
     productCategories: [
       ...new Set(t.items.map((i) => i.product?.category?.name).filter(Boolean)),
     ].join(", "),
-    invoiceImageUrl: t.invoice?.image || null, // ✅ for export
+    invoiceImageUrl: t.invoice?.fileUrl || null, // ✅ for export
   }));
 
   const formattedTransaction = mappedDataConstructor(

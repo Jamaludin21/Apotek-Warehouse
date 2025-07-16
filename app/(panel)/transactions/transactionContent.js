@@ -16,6 +16,7 @@ export default function TransactionContent({
   const [form] = Form.useForm();
   const [openModal, setOpenModal] = useState(false);
   const [stepper, setStepper] = useState(false);
+  const [scrollY, setScrollY] = useState(400);
   const [formData, setFormData] = useState({
     customer: {},
     products: [],
@@ -41,9 +42,10 @@ export default function TransactionContent({
     formData,
     formattedProduct,
     session,
+    scrollY,
   };
 
-  const propsState = { transactionStep: true, setFormData };
+  const propsState = { transactionStep: true, setFormData, setScrollY };
 
   const propsHandle = {
     showModal,
